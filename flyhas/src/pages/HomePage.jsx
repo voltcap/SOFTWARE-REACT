@@ -7,6 +7,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { TextField, Button, MenuItem, ToggleButton, ToggleButtonGroup, Box, Container, Grid, Card, CardMedia, CardContent, Typography, Select } from "@mui/material";
 
 import { FlightTakeoff, Person } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 const airports = [
     "İstanbul - Sabiha Gökçen (SAW)",
@@ -92,7 +93,11 @@ const HomePage = () => {
                             </TextField>
                         </Grid>
                         <Grid item xs={12} className="text-center" sx={{ marginBottom: 8 }}>
-                            <Button variant="contained" color="primary">Search Flight</Button>
+                            <Button variant="contained" color="primary">
+                                <Link className="link" to="/FlightList">
+                                    Search Flight
+                                </Link>
+                            </Button>
                         </Grid>
 
                     </Grid>
