@@ -11,8 +11,7 @@ const Navbar = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
-    z <
+  const handleMenuClose = () => {z<
     setAnchorEl(null);
   };
 

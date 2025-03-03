@@ -1,9 +1,10 @@
 import { useState } from 'react'
 
 import './App.css'
-import Flightlistpage from './Pages/Flightlistpage'
-import Navbar from './components/Navbar'
+import Flightlistpage from './pages/Flightlistpage'
 import HomePage from './pages/HomePage'
+import Navbar from './components/Navbar'
+
 
 function App() {
 
@@ -12,6 +13,8 @@ function App() {
       <Navbar />
       <HomePage />
       <Flightlistpage />
+
+
 
     </>
   )
