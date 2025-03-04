@@ -1,5 +1,5 @@
 import React from 'react';
-import Grid from '@mui/material/Grid2'; // Grid2 kullanılıyor
+import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -18,32 +18,32 @@ const Item = styled(Paper)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '70%', // Yüksekliği eşitlemek için
+    height: '70%',
 }));
 
 const RightFlatItem = styled(Item)(({ theme }) => ({
-    borderTopRightRadius: '0', // Sağ üst köşeyi düz yap
-    borderBottomRightRadius: '0', // Sağ alt köşeyi düz yap
-    borderRight: '0', // Sağ kenarlığı kaldır
+    borderTopRightRadius: '0',
+    borderBottomRightRadius: '0',
+    borderRight: '0',
 }));
 
 const LeftFlatItem = styled(Item)(({ theme }) => ({
-    borderTopLeftRadius: '0', // Sol üst köşeyi düz yap
-    borderBottomLeftRadius: '0', // Sol alt köşeyi düz yap
-    borderLeft: '0', // Sol kenarlığı kaldır
+    borderTopLeftRadius: '0',
+    borderBottomLeftRadius: '0',
+    borderLeft: '0',
 }));
 
 const AllFlatItem = styled(Item)(({ theme }) => ({
-    borderRadius: '0', // Tüm köşeleri düz yap
-    borderLeft: '0', // Sol kenarlığı kaldır
-    borderRight: '0', // Sağ kenarlığı kaldır
+    borderRadius: '0',
+    borderLeft: '0',
+    borderRight: '0',
 }));
 
 const FlightItem = ({ flight }) => {
     return (
 
         <Grid container spacing={1} alignItems="stretch" sx={{ display: 'flex', flexGrow: 1 }}>
-            {/* Sol taraf (8 birim genişliğinde) */}
+
             <Grid container size={{ xs: 12, md: 5, lg: 8 }} spacing={0} alignItems="stretch" >
                 <Grid size={{ xs: 6, lg: 2 }}>
                     <RightFlatItem>{flight.departure}</RightFlatItem>
@@ -71,7 +71,7 @@ const FlightItem = ({ flight }) => {
                 </Grid>
             </Grid>
 
-            {/* Sağ taraf (4 birim genişliğinde) */}
+
             <Grid container size={{ xs: 12, md: 5, lg: 4 }} spacing={0} alignItems="stretch" >
                 <Grid size={{ xs: 6, lg: 6 }}>
                     <RightFlatItem>{flight.price}</RightFlatItem>

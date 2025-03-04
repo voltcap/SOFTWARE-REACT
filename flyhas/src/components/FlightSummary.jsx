@@ -3,7 +3,7 @@ import Flightvector from '../assets/Flightvector.png';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid2'; // Grid2 kullanılıyor
+import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -23,7 +23,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const FlightSummary = ({ searchParams }) => {
     return (
-        <Box sx={{ width: '100%', mt: 0 }}> {/* Üstte boşluk bırakma sorununu düzelt */}
+        <Box sx={{ width: '100%', mt: 0 }}>
             <Grid container spacing={2} alignItems="stretch">
                 {/* İlk kutunun üstüne "Nereden" yazısı */}
                 <Grid size={2}>

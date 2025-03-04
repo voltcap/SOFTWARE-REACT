@@ -37,9 +37,9 @@ const Flightlistpage = () => {
             <Container maxWidth="md" sx={{
 
                 backgroundImage: `url(${backgroundImage})`,
-                backgroundSize: "cover", // Resmi otomatik ölçeklendirir
-                backgroundPosition: "center", // Ortalar
-                backgroundRepeat: "no-repeat", // Tekrarlanmasını engeller
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
                 p: 3,
                 borderRadius: 2,
                 mb: 4
@@ -50,7 +50,7 @@ const Flightlistpage = () => {
                             <FlightSummary searchParams={searchParams} />
                         </Box>
                     </Grid>
-                    <Divider sx={{ width: '100%' }} /> {/* Satır ayracı */}
+                    <Divider sx={{ width: '100%' }} />
                     <Grid size={12}>
                         <div p={2} borderRadius={2} boxShadow={2}>
                             <Accordioneditor />
@@ -62,10 +62,9 @@ const Flightlistpage = () => {
             <Container maxWidth="md" sx={{
 
                 backgroundImage: `url(${backgroundImage})`,
-                backgroundSize: "cover", // Resmi otomatik ölçeklendirir
-                backgroundPosition: "center", // Ortalar
-                backgroundRepeat: "no-repeat", // Tekrarlanmasını engeller
-                p: 3,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
                 borderRadius: 2,
                 mb: 4
             }}>
@@ -75,7 +74,7 @@ const Flightlistpage = () => {
                             <FlightList flights={flights} />
                         </Box>
                     </Grid>
-                    <Divider sx={{ width: '100%' }} /> {/* Satır ayracı */}
+                    <Divider sx={{ width: '100%' }} />
                 </Grid>
             </Container>
         </>
