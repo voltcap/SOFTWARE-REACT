@@ -7,6 +7,7 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import flight2 from '../assets/Flight2.png';
+import { Link } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: 'rgba(255, 255, 255, 0.8)', // Şeffaflık azaltıldı
@@ -79,7 +80,9 @@ const FlightItem = ({ flight }) => {
                 <Grid size={{ xs: 6, lg: 6 }}>
                     <LeftFlatItem>
                         <Button variant="contained" endIcon={<SendIcon />}>
-                            Book
+                            <Link className="link" to="/Seats">
+                                Book
+                            </Link>
                         </Button>
                     </LeftFlatItem>
                 </Grid>
