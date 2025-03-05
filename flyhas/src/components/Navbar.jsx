@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from 
 import MenuIcon from "@mui/icons-material/Menu";
 import { Box } from "@mui/material";
 import logo from "/src/assets/flyhas.png";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -11,8 +12,9 @@ const Navbar = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {z<
-    setAnchorEl(null);
+  const handleMenuClose = () => {
+    z <
+      setAnchorEl(null);
   };
 
   return (
@@ -52,7 +54,9 @@ const Navbar = () => {
           <Button color="inherit">Services</Button>
           <Button color="inherit">City Guide</Button>
           <Button sx={{ backgroundColor: "#001F5B", color: "white", "&:hover": { backgroundColor: "#000E3B" } }}>
-            Sign In
+            <Link className="link" to="/Register">
+              Register
+            </Link>
           </Button>
 
         </Box>

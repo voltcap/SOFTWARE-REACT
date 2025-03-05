@@ -24,7 +24,7 @@ const Item = styled("div")(({ theme }) => ({
     border: 'none',
     display: 'flex',
     alignItems: 'center',
-    height: '100%',
+    height: '45%',
 
 }));
 
@@ -39,7 +39,7 @@ const ProfileUserInfo = ({ Profile1 }) => {
                         src={profilephoto}
                         alt="profile pic"
                         sx={{
-                            width: "100%",
+                            width: "50%",
                             height: "100%",
                             objectFit: "contain",
                         }}
@@ -47,24 +47,24 @@ const ProfileUserInfo = ({ Profile1 }) => {
 
                 </Grid>
                 <Grid container spacing={0} size={{ xs: 6, md: 5, lg: 8 }} alignItems="stretch" >
-                    <Grid size={{ xs: 6, lg: 12 }} >
+                    <Grid size={{ xs: 3, lg: 12 }} >
                         <Item>{Profile1.name}</Item>
                     </Grid>
-                    <Grid size={{ xs: 6, lg: 12 }} >
+                    <Grid size={{ xs: 3, lg: 12 }} >
                         <Divider></Divider>
                     </Grid>
-                    <Grid size={{ xs: 6, lg: 12 }} >
+                    <Grid size={{ xs: 3, lg: 12 }} >
                         <Item>{Profile1.birth}</Item>
                     </Grid>
-                    <Grid size={{ xs: 6, lg: 12 }} >
+                    <Grid size={{ xs: 3, lg: 12 }} >
                         <Item>{Profile1.gender}</Item>
                     </Grid>
-                    <Grid size={{ xs: 6, lg: 12 }} >
+                    <Grid size={{ xs: 3, lg: 12 }} >
                         <Item>{Profile1.identityno}</Item>
                     </Grid>
-                    <Grid size={{ xs: 6, lg: 12 }} >
+                    <Grid size={{ xs: 3, lg: 12 }} >
                         <Button variant="outlined" size="small">
-                            Small
+                            Edit
                         </Button>
                     </Grid>
 
