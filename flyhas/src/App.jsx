@@ -10,6 +10,7 @@ import NotFoundPage from './pages/NotFoundPage'
 import ProfilePage from './pages/ProfilePage'
 import SeatSelectionPage from './pages/SeatSelectionPage';
 import CheckoutPage from './pages/CheckoutPage';
+import RegisterPage from './pages/RegisterPage'
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path='/Profile' element={<ProfilePage />} />
           <Route path='/Seats' element={<SeatSelectionPage />} />
           <Route path='/Checkout' element={<CheckoutPage />} />
+          <Route path='/Register' element={<RegisterPage />} />
 
           <Route path='*' element={<NotFoundPage />} />
 
