@@ -29,10 +29,10 @@ const FlightSummary = ({ searchParams }) => {
                 <Grid size={2}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 1 }}>
                         <Typography variant="h6" fontWeight="bold" sx={{ color: 'black' }}>
-                            Nereden
+                            From
                         </Typography>
                     </Box>
-                    <Item sx={{ border: 1, borderBlockColor: 'black', borderRightColor: 'black', borderLeftColor: 'black' }}>{searchParams.from}</Item>
+                    <Item >{searchParams.from}</Item>
                 </Grid>
 
                 {/* Resim olan kutucuk, üstüne bir şey yazılmıyor */}
@@ -55,7 +55,7 @@ const FlightSummary = ({ searchParams }) => {
                 <Grid size={2}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 1 }}>
                         <Typography variant="h6" fontWeight="bold" sx={{ color: 'black' }}>
-                            Nereye
+                            To
                         </Typography>
                     </Box>
                     <Item>{searchParams.to}</Item>
@@ -65,7 +65,7 @@ const FlightSummary = ({ searchParams }) => {
                 <Grid size={2}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 1 }}>
                         <Typography variant="h6" fontWeight="bold" sx={{ color: 'black' }}>
-                            Tarih
+                            Date
                         </Typography>
                     </Box>
                     <Item>{searchParams.date}</Item>
@@ -75,7 +75,7 @@ const FlightSummary = ({ searchParams }) => {
                 <Grid size={2}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 1 }}>
                         <Typography variant="h6" fontWeight="bold" sx={{ color: 'black' }}>
-                            Yolcu
+                            Person
                         </Typography>
                     </Box>
                     <Item>{searchParams.passengers} Yolcu</Item>

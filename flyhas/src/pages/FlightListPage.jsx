@@ -44,9 +44,9 @@ const Flightlistpage = () => {
                 borderRadius: 2,
                 mb: 4
             }}>
-                <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                <Grid container size={12} rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid size={12}>
-                        <Box bgcolor="white" p={2} borderRadius={2} boxShadow={2} sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", backdropFilter: "blur(10px)" }}>
+                        <Box bgcolor="white" p={2} borderRadius={2} boxShadow={2} sx={{ backgroundColor: "rgb(255, 255, 255)" }}>
                             <FlightSummary searchParams={searchParams} />
                         </Box>
                     </Grid>
@@ -61,16 +61,12 @@ const Flightlistpage = () => {
 
             <Container maxWidth="md" sx={{
 
-                backgroundImage: `url(${backgroundImage})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
                 borderRadius: 2,
                 mb: 4
             }}>
-                <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }} >
+                <Grid container size={12} rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }} >
                     <Grid size={12}>
-                        <Box bgcolor="white" p={2} borderRadius={2} boxShadow={2} sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", backdropFilter: "blur(10px)" }}>
+                        <Box bgcolor="white" p={2} borderRadius={2} sx={{ backgroundColor: "rgb(255, 255, 255)", }}>
                             <FlightList flights={flights} />
                         </Box>
                     </Grid>

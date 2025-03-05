@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 
 const FlightList = ({ flights }) => {
     return (
-        <Grid container spacing={2} sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", backdropFilter: "blur(10px)" }}>
+        <Grid container spacing={2} elevation={0} sx={{ backgroundColor: "rgba(255, 255, 255, 0)", }}>
             {flights.map((flight) => (
 
                 <Grid size={{ xs: 12, md: 5, lg: 12 }} key={flight.id}>
