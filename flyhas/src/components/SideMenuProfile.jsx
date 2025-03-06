@@ -1,5 +1,4 @@
 import React from 'react'
-import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -11,11 +10,14 @@ import FlightIcon from '@mui/icons-material/Flight';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
+import { useNavigate } from "react-router-dom";
+
 
 const SideMenuProfile = () => {
 
-    const [open, setOpen] = React.useState(true);
+    const navigate = useNavigate();
+
+    const [open, setOpen] = React.useState(false);
 
     const handleClick = () => {
         setOpen(!open);
@@ -26,13 +28,13 @@ const SideMenuProfile = () => {
             component="nav"
 
         >
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate("/AdminProfile/MyProfile")}>
                 <ListItemIcon>
                     <AccountCircleIcon />
                 </ListItemIcon>
                 <ListItemText primary="My Profile" />
             </ListItemButton>
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate("/AdminProfile/Support")}>
                 <ListItemIcon>
                     <SupportIcon />
                 </ListItemIcon>
@@ -47,13 +49,13 @@ const SideMenuProfile = () => {
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/AdminProfile/AddFlight")}>
                         <ListItemIcon>
                             <AddCircleIcon />
                         </ListItemIcon>
                         <ListItemText primary="Add Flight" />
                     </ListItemButton>
-                    <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/AdminProfile/AddDestination")}>
                         <ListItemIcon>
                             <AddCircleIcon />
                         </ListItemIcon>

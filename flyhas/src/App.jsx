@@ -4,7 +4,7 @@ import './App.css'
 import Box from '@mui/material/Box';
 import backgroundImage from './assets/Background.png';
 
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route } from "react-router-dom";
 
 import Flightlistpage from './pages/Flightlistpage'
 import HomePage from './pages/HomePage'
@@ -16,6 +16,10 @@ import CheckoutPage from './pages/CheckoutPage';
 import RegisterPage from './pages/RegisterPage'
 import PersonalInformationPage from './pages/PersonalInformationPage'
 import AdminPage from './pages/AdminPage'
+import AdminInfo from "./components/AdminInfo.jsx";
+import AdminSupport from "./components/AdminSupport.jsx";
+import AdminAddFlight from './components/AdminAddFlight.jsx';
+import AdminAddDestination from './components/AdminAddDestination.jsx';
 
 
 
@@ -42,9 +46,15 @@ function App() {
             <Route path='/Checkout' element={<CheckoutPage />} />
             <Route path='/Register' element={<RegisterPage />} />
             <Route path='/PersonalInfo' element={<PersonalInformationPage />} />
-            <Route path='/AdminProfile' element={<AdminPage />} />
+            <Route path='/AdminProfile/*' element={<AdminPage />}>
+              <Route path="MyProfile" element={<AdminInfo />} />
+              <Route path="Support" element={<AdminSupport />} />
+              <Route path="AddFlight" element={<AdminAddFlight />} />
+              <Route path="AddDestination" element={<AdminAddDestination />} />
+            </Route>
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
+
         </Box>
 
 

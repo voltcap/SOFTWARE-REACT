@@ -63,9 +63,9 @@ const AdminInfo = () => {
             <Grid size={{ xs: 12, sm: 9, md: 3, lg: 3 }}>
                 <ItemInside elevation={0}><Box component="img" alt="Remy Sharp" src={profilephoto} sx={{
                     width: { xs: "40%", sm: "30%", md: "100%", lg: "100%" },
-                    height: "auto", // Otomatik yükseklik
-                    aspectRatio: "1 / 1", // Kare oranı korunuyor
-                    objectFit: "cover", // Görüntünün kırpılmasını önler
+                    height: "auto",
+                    aspectRatio: "1 / 1",
+                    objectFit: "cover",
 
                 }} /></ItemInside>
             </Grid>
