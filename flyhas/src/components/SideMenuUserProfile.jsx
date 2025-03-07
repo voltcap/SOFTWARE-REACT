@@ -15,8 +15,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import BadgeIcon from '@mui/icons-material/Badge';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 
-
-const SideMenuProfile = () => {
+const SideMenuUserProfile = () => {
 
     const navigate = useNavigate();
 
@@ -25,19 +24,20 @@ const SideMenuProfile = () => {
     const handleClick = () => {
         setOpen(!open);
     };
+
     return (
         <List
             sx={{ width: '100%', bgcolor: 'background.paper' }}
             component="nav"
 
         >
-            <ListItemButton onClick={() => navigate("/AdminProfile/MyProfile")} >
+            <ListItemButton onClick={() => navigate("/UserProfile/MyProfile")}>
                 <ListItemIcon>
                     <AccountCircleIcon />
                 </ListItemIcon>
                 <ListItemText primary="My Profile" />
             </ListItemButton>
-            <ListItemButton onClick={() => navigate("/AdminProfile/Support")}>
+            <ListItemButton onClick={() => navigate("/UserProfile/Support")}>
                 <ListItemIcon>
                     <SupportIcon />
                 </ListItemIcon>
@@ -52,40 +52,11 @@ const SideMenuProfile = () => {
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/AdminProfile/AddFlight")}>
+                    <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/UserProfile/Reservations")}>
                         <ListItemIcon>
                             <AddCircleIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Add Flight" />
-                    </ListItemButton>
-                    <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/AdminProfile/AddDestination")}>
-                        <ListItemIcon>
-                            <AddCircleIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Add Destination" />
-                    </ListItemButton>
-                </List>
-            </Collapse>
-            <ListItemButton onClick={handleClick}>
-                <ListItemIcon>
-                    <SupervisedUserCircleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Users" />
-                {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/AdminProfile/Customers")}>
-                        <ListItemIcon>
-                            <PermIdentityIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Customers" />
-                    </ListItemButton>
-                    <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/AdminProfile/Employees")}>
-                        <ListItemIcon>
-                            <BadgeIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Employees" />
+                        <ListItemText primary="Reservations" />
                     </ListItemButton>
                 </List>
             </Collapse>
@@ -93,4 +64,4 @@ const SideMenuProfile = () => {
     )
 }
 
-export default SideMenuProfile
+export default SideMenuUserProfile

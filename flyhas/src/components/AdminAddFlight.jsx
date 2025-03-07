@@ -20,6 +20,7 @@ import ContactsIcon from '@mui/icons-material/Contacts';
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import Flightvector from '../assets/Flightvector.png'
 import Antalya from '../assets/Antalya.jpg'
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 
@@ -54,11 +55,28 @@ const ItemInside = styled(Paper)(({ theme }) => ({
 }));
 
 const AdminAddFlight = () => {
-    const flights = [
-        { id: 1, from: "İstanbul", to: "Ankara", departure: "08:50", landing: "10:00", date: "12 may 2025" },
-        { id: 2, from: "İstanbul", to: "Ankara", departure: "11:30", landing: "13:30", date: "13 May 2025" },
-        { id: 3, from: "İstanbul", to: "Ankara", departure: "16:20", landing: "18:00", date: "14 Dec 2025" }
-    ];
+
+    const [flights, setFlights] = useState([
+        { id: 1, from: "İstanbul", to: "Ankara", departure: "08:50", landing: "10:00", date: "12 May 2025" }
+    ]);
+    const [showForm, setShowForm] = useState(false);
+    const [newFlight, setNewFlight] = useState({ from: '', to: '', departure: '', landing: '', date: '' });
+
+    const handleAddFlight = () => {
+        setShowForm(true);
+    };
+
+    const handleSaveFlight = () => {
+        if (!newFlight.from || !newFlight.to || !newFlight.departure || !newFlight.landing || !newFlight.date) return;
+        setFlights([...flights, { id: flights.length + 1, ...newFlight }]);
+        setNewFlight({ from: '', to: '', departure: '', landing: '', date: '' });
+        setShowForm(false);
+    };
+
+    const handleDeleteFlight = (id) => {
+        setFlights(flights.filter(flight => flight.id !== id));
+    };
+
 
     return (
         <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} direction="column"
@@ -66,7 +84,7 @@ const AdminAddFlight = () => {
                 justifyContent: "flex-start",
                 alignItems: "stretch",
             }}>
-            <Grid container size={{ xs: 4, sm: 8, md: 12, lg: 12 }} direction="column"
+            {flights.map((flight) => (<Grid container size={{ xs: 4, sm: 8, md: 12, lg: 12 }} direction="column"
                 sx={{
                     justifyContent: "flex-start",
                     alignItems: "stretch",
@@ -89,45 +107,23 @@ const AdminAddFlight = () => {
 
                         }}
                     />
-                    <Box sx={{ display: 'flex', flexDirection: 'row', width: "100%", }}>
-                        <CardContent sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: 2,
-                            width: { xs: "55%", sm: "70%", md: "80%", lg: "85%" },
-                        }}>
-                            <ItemInside><Typography variant="body2" component="div" sx={{ textAlign: "center" }}>
-                                Istanbul
-                            </Typography></ItemInside>
-                            <ItemInside><Typography variant="body2" component="div" sx={{ textAlign: "center" }}>
-                                Ankara
-                            </Typography></ItemInside>
-                            <ItemInside><Typography variant="body2" sx={{ color: 'text.secondary', textAlign: "center" }}>
-                                16:30
-                            </Typography></ItemInside>
-                            <ItemInside><Typography variant="body2" sx={{ color: 'text.secondary', textAlign: "center" }}>
-                                18:30
-                            </Typography></ItemInside>
-                            <ItemInside><Typography variant="body2" sx={{ color: 'text.secondary', textAlign: "center" }}>
-                                12 May 2025
-                            </Typography></ItemInside>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', width: "100%" }}>
+                        <CardContent sx={{ display: "flex", gap: 2 }}>
+                            <ItemInside><Typography>{flight.from}</Typography></ItemInside>
+                            <ItemInside><Typography>{flight.to}</Typography></ItemInside>
+                            <ItemInside><Typography>{flight.departure}</Typography></ItemInside>
+                            <ItemInside><Typography>{flight.landing}</Typography></ItemInside>
+                            <ItemInside><Typography>{flight.date}</Typography></ItemInside>
                         </CardContent>
-                        <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: "flex-end", }}>
-                            <Box sx={{ '& > :not(style)': { m: 1 } }}>
-                                <Fab color="secondary" aria-label="edit" >
-                                    <CheckIcon />
-                                </Fab>
-                            </Box>
+                        <CardActions>
+                            <Fab color="secondary" onClick={() => handleDeleteFlight(flight.id)}>
+                                <DeleteIcon />
+                            </Fab>
                         </CardActions>
                     </Box>
                 </Card>
+            </Grid>))}
 
-
-
-
-            </Grid>
             <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} direction="row"
                 sx={{
                     justifyContent: "space-evenly",
@@ -137,20 +133,19 @@ const AdminAddFlight = () => {
                 {/*Buttons*/}
                 <Grid size={{ xs: 4, sm: 8, md: 12, lg: 12 }} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <Box sx={{ '& > :not(style)': { m: 1 } }}>
-                        <Fab aria-label="add" sx={{ backgroundColor: '#2e7d32' }}>
+                        <Fab aria-label="add" onClick={handleAddFlight} sx={{ backgroundColor: '#2e7d32' }}>
                             <AddIcon />
                         </Fab>
-                        <Fab aria-label="edit" sx={{ backgroundColor: '#d84315' }}>
-                            <RemoveIcon />
-                        </Fab>
-                        <Fab variant="extended">
-                            <CheckIcon sx={{ mr: 1 }} />
-                            Save
-                        </Fab>
+                        {showForm && (
+                            <Fab onClick={handleSaveFlight} variant="extended">
+                                <CheckIcon sx={{ mr: 1 }} />
+                                Save
+                            </Fab>)}
+
                     </Box>
                 </Grid>
             </Grid>
-            <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} direction="row"
+            {showForm && (<Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} direction="row"
                 sx={{
                     justifyContent: "space-evenly",
                     alignItems: "center",
@@ -164,41 +159,42 @@ const AdminAddFlight = () => {
                         required
                         id="outlined-required"
                         label="From"
-                        defaultValue="İstanbul"
+                        value={newFlight.from} onChange={(e) => setNewFlight({ ...newFlight, from: e.target.value })}
                         sx={{ width: '49%' }}
                     />
                     <TextField
                         required
                         id="outlined-required"
                         label="To"
-                        defaultValue="Ankara"
+                        value={newFlight.to} onChange={(e) => setNewFlight({ ...newFlight, to: e.target.value })}
                         sx={{ width: '49%' }}
                     />
                     <TextField
                         required
                         id="outlined-required"
                         label="Departure"
-                        defaultValue="12:00"
+                        value={newFlight.departure} onChange={(e) => setNewFlight({ ...newFlight, departure: e.target.value })}
                         sx={{ width: '32%' }}
                     />
                     <TextField
                         required
                         id="outlined-required"
                         label="Landing"
-                        defaultValue="15:30"
+                        value={newFlight.landing} onChange={(e) => setNewFlight({ ...newFlight, landing: e.target.value })}
                         sx={{ width: '32%' }}
                     />
                     <TextField
                         required
                         id="outlined-required"
                         label="Date"
-                        defaultValue="12 May 2026"
+                        value={newFlight.date} onChange={(e) => setNewFlight({ ...newFlight, date: e.target.value })}
                         sx={{ width: '32%' }}
                     />
 
                 </Grid>
 
-            </Grid>
+            </Grid>)}
+
 
         </Grid>
     )

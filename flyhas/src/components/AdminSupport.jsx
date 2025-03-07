@@ -103,17 +103,17 @@ const AdminSupport = () => {
                             </CardContent>
                             <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 <Box sx={{ '& > :not(style)': { m: 1 } }}>
-                                    <Fab aria-label="add" sx={{ backgroundColor: '#ff3d00' }}>
+                                    <Fab size="small" aria-label="add" sx={{ backgroundColor: '#ff3d00' }}>
                                         <AutoDeleteIcon />
                                     </Fab>
-                                    <Fab color="secondary" aria-label="edit">
+                                    <Fab size="small" color="secondary" aria-label="edit">
                                         <CheckIcon />
                                     </Fab>
-                                    <Fab variant="extended">
+                                    <Fab size="small" variant="extended">
                                         <ContactsIcon sx={{ mr: 1 }} />
                                         Contact user
                                     </Fab>
-                                    <Fab disabled aria-label="like">
+                                    <Fab size="small" disabled aria-label="like">
                                         <FavoriteIcon />
                                     </Fab>
                                 </Box>

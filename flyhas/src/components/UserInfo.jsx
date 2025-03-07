@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
-import ProfileWom from '../assets/ProfileWom.jpeg';
+import UserDum from '../assets/UserDum-png.png';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -36,8 +36,7 @@ const ItemInside = styled(Paper)(({ theme }) => ({
     }),
 }));
 
-const AdminInfo = () => {
-
+const UserInfo = () => {
     const [extraFields, setExtraFields] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
 
@@ -54,14 +53,13 @@ const AdminInfo = () => {
     );
 
     return (
-
         <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} direction="row"
             sx={{
                 justifyContent: "space-evenly",
                 alignItems: "flex-start",
             }}>
             <Grid size={{ xs: 12, sm: 9, md: 3, lg: 3 }}>
-                <ItemInside elevation={0}><Box component="img" alt="Remy Sharp" src={ProfileWom} sx={{
+                <ItemInside elevation={0}><Box component="img" alt="Remy Sharp" src={UserDum} sx={{
                     width: { xs: "40%", sm: "30%", md: "100%", lg: "100%" },
                     height: "auto",
                     aspectRatio: "1 / 1",
@@ -78,7 +76,7 @@ const AdminInfo = () => {
                     <ItemInside elevation={0} sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 2 }}><TextField
                         id="outlined-read-only-input"
                         label="Name"
-                        defaultValue="Lara"
+                        defaultValue="343582344"
                         slotProps={{
                             input: {
                                 readOnly: !isEditable,
@@ -88,7 +86,7 @@ const AdminInfo = () => {
                         <TextField
                             id="outlined-read-only-input"
                             label="Surname"
-                            defaultValue="Watson"
+                            defaultValue="343582344"
                             slotProps={{
                                 input: {
                                     readOnly: !isEditable,
@@ -101,7 +99,7 @@ const AdminInfo = () => {
                     <ItemInside elevation={0} sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 2 }}><TextField
                         id="outlined-read-only-input"
                         label="BirthDate"
-                        defaultValue=" 15 Jun 2004"
+                        defaultValue="12 May 1996"
                         slotProps={{
                             input: {
                                 readOnly: !isEditable,
@@ -113,7 +111,7 @@ const AdminInfo = () => {
                     <ItemInside elevation={0} sx={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 2 }}><TextField
                         id="outlined-read-only-input"
                         label="Gender"
-                        defaultValue="Female"
+                        defaultValue="Male"
                         slotProps={{
                             input: {
                                 readOnly: !isEditable,
@@ -173,4 +171,4 @@ const AdminInfo = () => {
     )
 }
 
-export default AdminInfo
+export default UserInfo

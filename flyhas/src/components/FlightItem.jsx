@@ -8,6 +8,8 @@ import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import flight2 from '../assets/Flight2.png';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: 'rgba(255, 255, 255, 0.8)', // Şeffaflık azaltıldı
@@ -41,19 +43,20 @@ const AllFlatItem = styled(Item)(({ theme }) => ({
 }));
 
 const FlightItem = ({ flight }) => {
+    const navigate = useNavigate();
     return (
 
         <Grid container spacing={1} alignItems="stretch" sx={{ display: 'flex', flexGrow: 1 }}>
 
             <Grid container size={{ xs: 12, md: 5, lg: 8 }} spacing={0} alignItems="stretch" >
                 <Grid size={{ xs: 6, lg: 2 }}>
-                    <RightFlatItem>{flight.departure}</RightFlatItem>
+                    <RightFlatItem elevation={0} >{flight.departure}</RightFlatItem>
                 </Grid>
                 <Grid size={{ xs: 6, lg: 2 }}>
-                    <AllFlatItem >{flight.from}</AllFlatItem>
+                    <AllFlatItem elevation={0}>{flight.from}</AllFlatItem>
                 </Grid>
                 <Grid size={{ xs: 6, lg: 3 }}>
-                    <AllFlatItem ><Box
+                    <AllFlatItem elevation={0}><Box
                         component="img"
                         src={flight2}
                         alt="Flight Icon"
@@ -65,24 +68,24 @@ const FlightItem = ({ flight }) => {
                     /></AllFlatItem>
                 </Grid>
                 <Grid size={{ xs: 6, lg: 2 }}>
-                    <AllFlatItem >{flight.to}</AllFlatItem>
+                    <AllFlatItem elevation={0}>{flight.to}</AllFlatItem>
                 </Grid>
                 <Grid size={{ xs: 6, lg: 2 }}>
-                    <LeftFlatItem>{flight.landing}</LeftFlatItem>
+                    <LeftFlatItem elevation={0}>{flight.landing}</LeftFlatItem>
                 </Grid>
             </Grid>
 
 
             <Grid container size={{ xs: 12, md: 5, lg: 4 }} spacing={0} alignItems="stretch" >
                 <Grid size={{ xs: 6, lg: 6 }}>
-                    <RightFlatItem>{flight.price}</RightFlatItem>
+                    <RightFlatItem elevation={0}>{flight.price}</RightFlatItem>
                 </Grid>
                 <Grid size={{ xs: 6, lg: 6 }}>
-                    <LeftFlatItem>
-                        <Button variant="contained" endIcon={<SendIcon />}>
-                            <Link className="link" to="/Seats">
-                                Book
-                            </Link>
+                    <LeftFlatItem elevation={0}>
+                        <Button variant="contained" endIcon={<AirplaneTicketIcon />} onClick={() => navigate("/Seats")}>
+
+                            Book
+
                         </Button>
                     </LeftFlatItem>
                 </Grid>

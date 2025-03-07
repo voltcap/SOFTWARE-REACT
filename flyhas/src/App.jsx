@@ -10,7 +10,6 @@ import Flightlistpage from './pages/Flightlistpage'
 import HomePage from './pages/HomePage'
 import Navbar from './components/Navbar'
 import NotFoundPage from './pages/NotFoundPage'
-import ProfilePage from './pages/ProfilePage'
 import SeatSelectionPage from './pages/SeatSelectionPage';
 import CheckoutPage from './pages/CheckoutPage';
 import RegisterPage from './pages/RegisterPage'
@@ -20,6 +19,12 @@ import AdminInfo from "./components/AdminInfo.jsx";
 import AdminSupport from "./components/AdminSupport.jsx";
 import AdminAddFlight from './components/AdminAddFlight.jsx';
 import AdminAddDestination from './components/AdminAddDestination.jsx';
+import AdminShowCustomer from './components/AdminShowCustomer.jsx';
+import AdminShowEmployee from './components/AdminShowEmployee.jsx';
+import UserPage from './pages/UserPage.jsx';
+import UserReservations from './components/UserReservations.jsx';
+import UserInfo from './components/UserInfo.jsx';
+import UserSupport from './components/UserSupport.jsx';
 
 
 
@@ -41,16 +46,22 @@ function App() {
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/FlightList' element={<Flightlistpage />} />
-            <Route path='/Profile' element={<ProfilePage />} />
             <Route path='/Seats' element={<SeatSelectionPage />} />
             <Route path='/Checkout' element={<CheckoutPage />} />
             <Route path='/Register' element={<RegisterPage />} />
             <Route path='/PersonalInfo' element={<PersonalInformationPage />} />
+            <Route path='/UserProfile/*' element={<UserPage />}>
+              <Route path="MyProfile" element={<UserInfo />} />
+              <Route path="Support" element={<UserSupport />} />
+              <Route path="Reservations" element={<UserReservations />} />
+            </Route>
             <Route path='/AdminProfile/*' element={<AdminPage />}>
               <Route path="MyProfile" element={<AdminInfo />} />
               <Route path="Support" element={<AdminSupport />} />
               <Route path="AddFlight" element={<AdminAddFlight />} />
               <Route path="AddDestination" element={<AdminAddDestination />} />
+              <Route path="Customers" element={<AdminShowCustomer />} />
+              <Route path="Employees" element={<AdminShowEmployee />} />
             </Route>
             <Route path='*' element={<NotFoundPage />} />
           </Routes>

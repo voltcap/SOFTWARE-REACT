@@ -110,7 +110,7 @@ const HomePage = () => {
                         </Typography>
                     </div>
                     <Grid container spacing={4} justifyContent="center">
-                        {["İstanbul", "London", "Vienna", "Ankara"].map((city, index) => (
+                        {["Istanbul", "London", "Vienna", "Ankara"].map((city, index) => (
                             <Grid item xs={12} sm={6} md={3} key={index}>
                                 <Card className="rounded-2xl shadow-md">
                                     <CardMedia component="img" height="200" image={`/images/${city.toLowerCase()}.png`} alt={city} className="rounded-t-2xl" />
