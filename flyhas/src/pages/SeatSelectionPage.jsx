@@ -245,7 +245,7 @@ const SeatSelectionPage = () => {
                                     variant="contained"
                                     onClick={() => {
                                         confirmSelection();
-                                        navigate("/Checkout");
+                                        navigate("/PersonalInfo");
                                     }}
                                     disabled={selectedSeats.length === 0}
                                     fullWidth

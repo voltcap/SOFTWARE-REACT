@@ -147,7 +147,7 @@ function LoginPage() {
             disabled={Object.keys(errors).length > 0 || loading}
           >
             {/* loading icon or sign up text */}
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Sign Up"}
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Sign In"}
           </Button>
         </Box>
         <Typography sx={{ marginTop: 2 }}>Dont you have account? Create new account</Typography>
