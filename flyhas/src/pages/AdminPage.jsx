@@ -24,45 +24,37 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const AdminPage = () => {
     return (
-        <Box sx={{
-            justifyContent: "space-evenly",
-            backgroundImage: `url(${backgroundImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            minHeight: "100vh",
-            alignItems: { md: "flex-start" },
-            p: 2, gap: 2,
-        }}>
-            <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} direction="row"
+
+        <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} direction="row"
+            sx={{
+                justifyContent: "space-evenly",
+                alignItems: "flex-start",
+            }}>
+            <Grid size={{ xs: 4, sm: 9, md: 3 }}>
+                <Item><SideMenuProfile /></Item>
+            </Grid>
+            <Grid container size={{ xs: 4, sm: 9, md: 9 }} direction="column"
                 sx={{
-                    justifyContent: "space-evenly",
-                    alignItems: "flex-start",
+                    justifyContent: "flex-start",
+                    alignItems: "stretch",
                 }}>
-                <Grid size={{ xs: 4, sm: 9, md: 3 }}>
-                    <Item><SideMenuProfile /></Item>
-                </Grid>
-                <Grid container size={{ xs: 4, sm: 9, md: 9 }} direction="column"
-                    sx={{
-                        justifyContent: "flex-start",
-                        alignItems: "stretch",
-                    }}>
-                    <Grid container spacing={2} size={{ xs: 4, sm: 8, md: 12, lg: 12 }} direction="column" sx={{
-                        justifyContent: "flex-start",
-                        alignItems: "stretch",
-                    }} >
-                        {/*<Item><AdminInfo /></Item>*/}
-                        <Item><Outlet /></Item>
-
-                    </Grid>
-                    <Grid size={{ xs: 4, sm: 8, md: 12, lg: 12 }}>
-
-                    </Grid>
+                <Grid container spacing={2} size={{ xs: 4, sm: 8, md: 12, lg: 12 }} direction="column" sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "stretch",
+                }} >
+                    {/*<Item><AdminInfo /></Item>*/}
+                    <Item><Outlet /></Item>
 
                 </Grid>
+                <Grid size={{ xs: 4, sm: 8, md: 12, lg: 12 }}>
 
+                </Grid>
 
             </Grid>
-        </Box>
+
+
+        </Grid>
+
 
     )
 }

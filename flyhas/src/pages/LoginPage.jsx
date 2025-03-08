@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Container, TextField, Button, Typography, Paper, Box, IconButton, InputAdornment, CircularProgress } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 //login page component
 function LoginPage() {
-    //state definations
+  const navigate = useNavigate();
+
+  //state definations
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -87,12 +90,12 @@ function LoginPage() {
           backgroundColor: "rgba(255, 255, 255, 0.9)",
         }}
       >
-         {/* title */}
+        {/* title */}
         <Typography variant="h5" fontWeight="bold" color="primary" gutterBottom>
-          Sign Up
+          Login
         </Typography>
         <Box component="form" sx={{ width: "100%" }}>
-            {/* email input */}
+          {/* email input */}
           <TextField
             fullWidth
             label="Email"
@@ -135,13 +138,35 @@ function LoginPage() {
                 backgroundColor: "#001a4d", // Hover için koyu lacivert
               },
             }}
-            onClick={register}
+
+
+            onClick={() => {
+              register();
+              navigate("/UserProfile/MyProfile");
+            }}
             disabled={Object.keys(errors).length > 0 || loading}
           >
             {/* loading icon or sign up text */}
             {loading ? <CircularProgress size={24} color="inherit" /> : "Sign Up"}
           </Button>
         </Box>
+        <Typography sx={{ marginTop: 2 }}>Dont you have account? Create new account</Typography>
+        <Button
+          fullWidth
+          variant="contained"
+          sx={{
+            backgroundColor: "#001f5c",
+            "&:hover": {
+              backgroundColor: "#001a4d",
+            },
+          }}
+          onClick={() => {
+
+            navigate("/Register");
+          }}
+        >
+          Register
+        </Button>
       </Paper>
     </Container>
   );

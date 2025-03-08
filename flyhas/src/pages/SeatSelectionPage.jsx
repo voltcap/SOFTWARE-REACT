@@ -85,7 +85,11 @@ const SeatSelectionPage = () => {
                             sx={{
                                 backgroundColor: "white",
                                 borderRadius: 4,
+                                Border: 1,
+
+                                borderColor: "gray",
                                 padding: 3,
+                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                             }}
                         >
                             <Typography variant="h5" gutterBottom sx={{ textAlign: "center", mb: 3 }}>
@@ -190,7 +194,9 @@ const SeatSelectionPage = () => {
                             sx={{
                                 backgroundColor: "white",
                                 borderRadius: 4,
+                                borderColor: "gray",
                                 padding: 3,
+                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                             }}
                         >
                             <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>

@@ -97,7 +97,9 @@ const CheckoutPage = () => {
                             sx={{
                                 backgroundColor: "rgba(255, 255, 255, 1)",
                                 borderRadius: 4,
+                                borderColor: "gray",
                                 padding: 3,
+                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                             }}
                         >
                             <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
@@ -157,6 +159,7 @@ const CheckoutPage = () => {
                                 perspective: "1000px",
                                 marginLeft: "auto",
                                 width: "90%",
+
                             }}
                         >
                             <Box
@@ -182,6 +185,8 @@ const CheckoutPage = () => {
                                         display: "flex",
                                         flexDirection: "column",
                                         justifyContent: "space-between",
+                                        borderColor: "gray",
+                                        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                                     }}
                                 >
                                     <Typography variant="h6">Card Number</Typography>
@@ -222,6 +227,8 @@ const CheckoutPage = () => {
                                         display: "flex",
                                         flexDirection: "column",
                                         justifyContent: "space-between",
+                                        borderColor: "gray",
+                                        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
                                     }}
                                 >
                                     <Typography variant="h6">CVV</Typography>
@@ -305,7 +312,10 @@ const CheckoutPage = () => {
                     </Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseConfirmation} color="primary">
+                    <Button onClick={() => {
+                        handleCloseConfirmation();
+                        navigate("/UserProfile/Reservations");
+                    }} color="primary">
                         Close
                     </Button>
                 </DialogActions>

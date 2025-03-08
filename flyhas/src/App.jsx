@@ -25,6 +25,14 @@ import UserPage from './pages/UserPage.jsx';
 import UserReservations from './components/UserReservations.jsx';
 import UserInfo from './components/UserInfo.jsx';
 import UserSupport from './components/UserSupport.jsx';
+import Footer from './components/Footer.jsx';
+import LoginPage from './pages/LoginPage.jsx'
+import AboutUs from './pages/AboutUs.jsx';
+import GalleriesPage from './pages/GalleriesPage.jsx';
+import VisionMissionPage from './pages/VisionMissionPage.jsx';
+import OurPolicyPage from './pages/OurPolicyPage.jsx';
+import ServicesPage from './pages/ServicesPage.jsx';
+import CityGuidePage from './pages/CityGuidePage.jsx';
 
 
 
@@ -42,6 +50,7 @@ function App() {
           minHeight: "100vh",
           alignItems: { md: "flex-start" },
           p: 2, gap: 2,
+
         }}>
           <Routes>
             <Route path='/' element={<HomePage />} />
@@ -49,6 +58,7 @@ function App() {
             <Route path='/Seats' element={<SeatSelectionPage />} />
             <Route path='/Checkout' element={<CheckoutPage />} />
             <Route path='/Register' element={<RegisterPage />} />
+            <Route path='/Login' element={<LoginPage />} />
             <Route path='/PersonalInfo' element={<PersonalInformationPage />} />
             <Route path='/UserProfile/*' element={<UserPage />}>
               <Route path="MyProfile" element={<UserInfo />} />
@@ -63,10 +73,18 @@ function App() {
               <Route path="Customers" element={<AdminShowCustomer />} />
               <Route path="Employees" element={<AdminShowEmployee />} />
             </Route>
+            <Route path='/AboutUs' element={<AboutUs />} />
+            <Route path='/Galleries' element={<GalleriesPage />} />
+            <Route path='/OurPolicy' element={<OurPolicyPage />} />
+            <Route path='/VisionMission' element={<VisionMissionPage />} />
+            <Route path='/Services' element={<ServicesPage />} />
+            <Route path='/CityGuide' element={<CityGuidePage />} />
+
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
 
         </Box>
+        <Footer />
 
 
 

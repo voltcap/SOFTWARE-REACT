@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { Container, TextField, Button, Typography, Paper, Box, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Circle, CheckCircle, Cancel } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",   //user name
     surname: "", //user surname
@@ -272,9 +275,12 @@ function RegisterPage() {
                 backgroundColor: "#001a4d",
               },
             }}
-            onClick={register}
+            onClick={() => {
+              register();
+              navigate("/Login");
+            }}
           >
-            Sign Up
+            Sign In
           </Button>
 
         </Paper>

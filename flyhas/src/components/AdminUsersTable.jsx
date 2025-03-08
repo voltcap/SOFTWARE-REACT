@@ -16,30 +16,28 @@ const AdminEmployeesTable = () => {
             width: 90,
         },
         {
-            field: 'fullName',
-            headerName: 'Full name',
-            description: 'This column has a value getter and is not sortable.',
+            field: 'idNumber',
+            headerName: 'ID Number',
+            description: 'This column shows the ID number. It is not sortable.',
             sortable: false,
             width: 160,
-            valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
         },
     ];
 
     const rows = [
-        { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-        { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-        { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-        { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-        { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-        { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-        { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-        { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-        { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+        { id: 1, lastName: 'Johnson', firstName: 'Emma', age: 28, idNumber: '1234567890' },
+        { id: 2, lastName: 'Williams', firstName: 'Liam', age: 34, idNumber: '2345678901' },
+        { id: 3, lastName: 'Brown', firstName: 'Olivia', age: 27, idNumber: '3456789012' },
+        { id: 4, lastName: 'Jones', firstName: 'Noah', age: 40, idNumber: '4567890123' },
+        { id: 5, lastName: 'Davis', firstName: 'Ava', age: 31, idNumber: '5678901234' },
+        { id: 6, lastName: 'Miller', firstName: 'Sophia', age: 29, idNumber: '6789012345' },
+        { id: 7, lastName: 'Wilson', firstName: 'James', age: 37, idNumber: '7890123456' },
+        { id: 8, lastName: 'Moore', firstName: 'Isabella', age: 26, idNumber: '8901234567' },
+        { id: 9, lastName: 'Taylor', firstName: 'Benjamin', age: 45, idNumber: '9012345678' },
     ];
 
     const paginationModel = { page: 0, pageSize: 5 };
     return (
-
         <Grid container size={{ xs: 4, sm: 8, md: 12 }} direction="column"
             sx={{
                 justifyContent: "space-evenly",
@@ -56,13 +54,8 @@ const AdminEmployeesTable = () => {
                 />
             </Paper>
         </Grid>
-
-
-
-
     )
 }
 
-export default AdminEmployeesTable
-
+export default AdminEmployeesTable;
 

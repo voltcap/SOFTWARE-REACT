@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
 import Accordioneditor from "../components/Accordioneditor";
-import backgroundImage from '../assets/Antalya.jpg';
+import backgroundImage from '../assets/Morocco.jpg';
 import FlightSummary from '../components/FlightSummary';
 import FlightList from '../components/FlightList';
 
@@ -46,7 +46,12 @@ const Flightlistpage = () => {
             }}>
                 <Grid container size={12} rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid size={12}>
-                        <Box bgcolor="white" p={2} borderRadius={2} boxShadow={2} sx={{ backgroundColor: "rgb(255, 255, 255)" }}>
+                        <Box bgcolor="white" p={2} borderRadius={2} boxShadow={2} sx={{
+                            backgroundColor: "rgb(255, 255, 255)", borderRadius: 4,
+                            borderColor: "gray",
+                            padding: 3,
+                            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                        }}>
                             <FlightSummary searchParams={searchParams} />
                         </Box>
                     </Grid>
@@ -65,8 +70,14 @@ const Flightlistpage = () => {
                 mb: 4
             }}>
                 <Grid container size={12} rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }} >
+                    <Divider sx={{ width: '100%' }} />
                     <Grid size={12}>
-                        <Box bgcolor="white" p={2} borderRadius={2} sx={{ backgroundColor: "rgb(255, 255, 255)", }}>
+                        <Box bgcolor="white" p={2} borderRadius={2} sx={{
+                            backgroundColor: "rgb(255, 255, 255)", borderRadius: 4,
+                            borderColor: "gray",
+                            padding: 3,
+                            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                        }}>
                             <FlightList flights={flights} />
                         </Box>
                     </Grid>

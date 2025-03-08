@@ -23,9 +23,9 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const FlightSummary = ({ searchParams }) => {
     return (
-        <Box sx={{ width: '100%', mt: 0 }}>
+        <Box sx={{ width: '100%', mt: 0, borderRadius: 2, }}>
             <Grid container spacing={2} alignItems="stretch">
-                {/* İlk kutunun üstüne "Nereden" yazısı */}
+
                 <Grid size={2}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 1 }}>
                         <Typography variant="h6" fontWeight="bold" sx={{ color: 'black' }}>
@@ -35,7 +35,7 @@ const FlightSummary = ({ searchParams }) => {
                     <Item >{searchParams.from}</Item>
                 </Grid>
 
-                {/* Resim olan kutucuk, üstüne bir şey yazılmıyor */}
+
                 <Grid size={4}>
                     <Item elevation={0} sx={{ backgroundColor: 'transparent', p: 0 }}>
                         <Box
@@ -51,7 +51,7 @@ const FlightSummary = ({ searchParams }) => {
                     </Item>
                 </Grid>
 
-                {/* 3. kutunun üstüne "Nereye" yazısı */}
+
                 <Grid size={2}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 1 }}>
                         <Typography variant="h6" fontWeight="bold" sx={{ color: 'black' }}>
@@ -61,7 +61,7 @@ const FlightSummary = ({ searchParams }) => {
                     <Item>{searchParams.to}</Item>
                 </Grid>
 
-                {/* 4. kutunun üstüne "Tarih" yazısı */}
+
                 <Grid size={2}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 1 }}>
                         <Typography variant="h6" fontWeight="bold" sx={{ color: 'black' }}>
@@ -71,7 +71,7 @@ const FlightSummary = ({ searchParams }) => {
                     <Item>{searchParams.date}</Item>
                 </Grid>
 
-                {/* 5. kutunun üstüne "Yolcu" yazısı */}
+
                 <Grid size={2}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 1 }}>
                         <Typography variant="h6" fontWeight="bold" sx={{ color: 'black' }}>
