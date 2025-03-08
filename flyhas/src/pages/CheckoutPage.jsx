@@ -5,8 +5,10 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
+    const navigate = useNavigate();
     const selectedSeats = ["1A", "1B"];
     const passengerInfo = [
         {
