@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import Grid from '@mui/material/Grid2';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -15,6 +13,9 @@ import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import CheckIcon from '@mui/icons-material/Check';
 
 import profilephoto from '../assets/profilephoto.png';
+import profile1 from '../assets/profile1.png';
+import profile2 from '../assets/profile2.png';
+
 
 
 const AdminSupport = () => {
@@ -35,7 +36,7 @@ const AdminSupport = () => {
                             component="img"
                             alt="SupportProfile"
 
-                            image={profilephoto}
+                            image={profile2}
                             sx={{
                                 width: { xs: "30%", sm: "30%", md: "28%", lg: "24%" },
                                 height: "auto",
@@ -81,7 +82,7 @@ const AdminSupport = () => {
                             component="img"
                             alt="SupportProfile"
 
-                            image={profilephoto}
+                            image={profile1}
                             sx={{
                                 width: { xs: "30%", sm: "30%", md: "28%", lg: "24%" },
                                 height: "auto",
