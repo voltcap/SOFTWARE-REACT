@@ -11,8 +11,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import CheckIcon from '@mui/icons-material/Check';
-
-import profilephoto from '../assets/profilephoto.png';
 import profile1 from '../assets/profile1.png';
 import profile2 from '../assets/profile2.png';
 
