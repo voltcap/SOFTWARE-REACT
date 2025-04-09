@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { Container, TextField, Button, Typography, Paper, Box, IconButton, InputAdornment, CircularProgress } from "@mui/material";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  Box,
+  IconButton,
+  InputAdornment,
+  CircularProgress,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import AuthService from "../services/AuthService";
 
-//login page component
 function LoginPage() {
   const navigate = useNavigate();
 
-  //state definations
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,23 +25,21 @@ function LoginPage() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  //handle input changes
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    //if there is an error message, clear it
+
     if (errors[e.target.name]) {
       setErrors((prevErrors) => {
         const newErrors = { ...prevErrors };
-        delete newErrors[e.target.name]; // clear the error message
+        delete newErrors[e.target.name];
         return newErrors;
       });
     }
   };
 
-  //change the visibility of the password
   const togglePasswordVisibility = () => {
     setFormData((prev) => ({
       ...prev,
@@ -40,8 +47,7 @@ function LoginPage() {
     }));
   };
 
-  //form validation
-  function validateForm() {
+  const validateForm = () => {
     let newErrors = {};
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.password) newErrors.password = "Password is required";
@@ -50,22 +56,36 @@ function LoginPage() {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }
+  };
 
-  //register function
-  async function register() {
-    if (validateForm()) {
-      setLoading(true);
-      const user = { ...formData };
-      console.log(user);
-      setTimeout(() => {
-        setLoading(false);
-        alert("Registration Successful!");
-      }, 2000);
+  const login = async () => {
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      const { token, role } = await AuthService.login(
+        formData.email,
+        formData.password
+      );
+
+      // Rol bazlı yönlendirme
+      if (role === "ADMIN") {
+        navigate("/AdminProfile/MyProfile");
+      } else if (role === "MANAGER") {
+        navigate("/ManagerProfile/MyProfile");
+      } else if (role === "CUSTOMER") {
+        navigate("/UserProfile/MyProfile");
+      } else {
+        alert("Unknown role");
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert("User not found or wrong credentials");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-  //mui login page design
   return (
     <Container
       maxWidth="xs"
@@ -74,9 +94,6 @@ function LoginPage() {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
       }}
     >
       <Paper
@@ -90,12 +107,10 @@ function LoginPage() {
           backgroundColor: "rgba(255, 255, 255, 0.9)",
         }}
       >
-        {/* title */}
         <Typography variant="h5" fontWeight="bold" color="primary" gutterBottom>
           Login
         </Typography>
         <Box component="form" sx={{ width: "100%" }}>
-          {/* email input */}
           <TextField
             fullWidth
             label="Email"
@@ -106,7 +121,6 @@ function LoginPage() {
             error={!!errors.email}
             helperText={errors.email}
           />
-          {/* password input */}
           <TextField
             fullWidth
             label="Password"
@@ -127,30 +141,31 @@ function LoginPage() {
               ),
             }}
           />
-          {/* register button */}
+
           <Button
             fullWidth
             variant="contained"
             sx={{
               marginTop: 2,
-              backgroundColor: "#001f5c", // Lacivert renk
+              backgroundColor: "#001f5c",
               "&:hover": {
-                backgroundColor: "#001a4d", // Hover için koyu lacivert
+                backgroundColor: "#001a4d",
               },
             }}
-
-
-            onClick={() => {
-              register();
-              navigate("/UserProfile/MyProfile");
-            }}
-            disabled={Object.keys(errors).length > 0 || loading}
+            onClick={login}
+            disabled={loading}
           >
-            {/* loading icon or sign up text */}
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Sign In"}
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Sign In"
+            )}
           </Button>
         </Box>
-        <Typography sx={{ marginTop: 2 }}>Dont you have account? Create new account</Typography>
+
+        <Typography sx={{ marginTop: 2 }}>
+          Don’t you have account? Create new account
+        </Typography>
         <Button
           fullWidth
           variant="contained"
@@ -160,10 +175,7 @@ function LoginPage() {
               backgroundColor: "#001a4d",
             },
           }}
-          onClick={() => {
-
-            navigate("/Register");
-          }}
+          onClick={() => navigate("/Register")}
         >
           Register
         </Button>
