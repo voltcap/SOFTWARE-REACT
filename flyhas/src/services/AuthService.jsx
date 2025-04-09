@@ -1,4 +1,4 @@
-// services/AuthService.js
+
 import axios from "axios";
 
 const API_URL = "http://localhost:8080/api/auth";
@@ -41,9 +41,9 @@ const logout = () => {
     localStorage.removeItem("userName");
 };
 
-// Export fonksiyonlar
+
 export default {
     login,
-    registerCustomer, // ❗ Bunu da export ediyoruz
+    registerCustomer,
     logout,
 };

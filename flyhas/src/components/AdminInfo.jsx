@@ -62,7 +62,7 @@ const AdminInfo = () => {
 
     const handleToggleEdit = () => {
         if (isEditable) {
-            handleSave(); // Kaydet
+            handleSave();
         }
         setIsEditable(!isEditable);
     };

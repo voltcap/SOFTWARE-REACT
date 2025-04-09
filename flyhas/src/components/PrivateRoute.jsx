@@ -15,7 +15,7 @@ const PrivateRoute = ({ requiredRole }) => {
         const userRole = decoded.role;
 
         if (userRole === requiredRole) {
-            return <Outlet />; // ✅ Alt rotaları burada render et
+            return <Outlet />;
         } else {
             return <Navigate to="/login" replace />;
         }
