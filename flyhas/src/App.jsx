@@ -33,6 +33,7 @@ import VisionMissionPage from './pages/VisionMissionPage.jsx';
 import OurPolicyPage from './pages/OurPolicyPage.jsx';
 import ServicesPage from './pages/ServicesPage.jsx';
 import CityGuidePage from './pages/CityGuidePage.jsx';
+import PrivateRoute from './components/PrivateRoute';
 
 
 
@@ -60,18 +61,22 @@ function App() {
             <Route path='/Register' element={<RegisterPage />} />
             <Route path='/Login' element={<LoginPage />} />
             <Route path='/PersonalInfo' element={<PersonalInformationPage />} />
-            <Route path='/UserProfile/*' element={<UserPage />}>
-              <Route path="MyProfile" element={<UserInfo />} />
-              <Route path="Support" element={<UserSupport />} />
-              <Route path="Reservations" element={<UserReservations />} />
+            <Route path="/UserProfile/*" element={<PrivateRoute requiredRole="CUSTOMER" />}>
+              <Route path="" element={<UserPage />}>
+                <Route path="MyProfile" element={<UserInfo />} />
+                <Route path="Support" element={<UserSupport />} />
+                <Route path="Reservations" element={<UserReservations />} />
+              </Route>
             </Route>
-            <Route path='/AdminProfile/*' element={<AdminPage />}>
-              <Route path="MyProfile" element={<AdminInfo />} />
-              <Route path="Support" element={<AdminSupport />} />
-              <Route path="AddFlight" element={<AdminAddFlight />} />
-              <Route path="AddDestination" element={<AdminAddDestination />} />
-              <Route path="Customers" element={<AdminShowCustomer />} />
-              <Route path="Employees" element={<AdminShowEmployee />} />
+            <Route path="/AdminProfile/*" element={<PrivateRoute requiredRole="ADMIN" />}>
+              <Route path="" element={<AdminPage />}>
+                <Route path="MyProfile" element={<AdminInfo />} />
+                <Route path="Support" element={<AdminSupport />} />
+                <Route path="AddFlight" element={<AdminAddFlight />} />
+                <Route path="AddDestination" element={<AdminAddDestination />} />
+                <Route path="Customers" element={<AdminShowCustomer />} />
+                <Route path="Employees" element={<AdminShowEmployee />} />
+              </Route>
             </Route>
             <Route path='/AboutUs' element={<AboutUs />} />
             <Route path='/Galleries' element={<GalleriesPage />} />
