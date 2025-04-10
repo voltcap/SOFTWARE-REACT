@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Grid from '@mui/material/Grid2';
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -9,9 +9,10 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import TextField from '@mui/material/TextField';
 import CardMedia from '@mui/material/CardMedia';
-import Antalya from '../assets/Antalya.jpg'
-import { Typography } from '@mui/material';
-import Divider from '@mui/material/Divider';
+import { Typography, Divider } from '@mui/material';
+import axios from 'axios';
+
+import Antalya from '../assets/Antalya.jpg';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -19,155 +20,125 @@ const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    ...theme.applyStyles('dark', {
-        backgroundColor: '#1A2027',
-        justifyContent: "flex-start",
-        alignItems: "stretch",
-    }),
 }));
 
 const AdminAddDestination = () => {
-
-    const [destinations, setDestinations] = useState([
-        { id: 1, city: "İstanbul", country: "Turkey" },
-        { id: 2, city: "Ankara", country: "Turkey" },
-        { id: 3, city: "İzmir", country: "Turkey" }
-    ]);
-
-    const [newDestination, setNewDestination] = useState({ city: '', country: '' });
+    const [cities, setCities] = useState([]);
+    const [newCity, setNewCity] = useState({ name: '', country: '' });
     const [showInput, setShowInput] = useState(false);
 
-    const handleAddClick = () => {
-        setShowInput(true);
-    };
-
-    const handleSaveClick = () => {
-        if (newDestination.city && newDestination.country) {
-            setDestinations([...destinations, { id: destinations.length + 1, ...newDestination }]);
-            setNewDestination({ city: '', country: '' });
-            setShowInput(false);
+    const fetchCities = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/cities');
+            setCities(response.data);
+        } catch (error) {
+            console.error('Şehirler alınamadı:', error);
         }
     };
 
-    const handleRemoveClick = (id) => {
-        setDestinations(destinations.filter(destination => destination.id !== id));
+    useEffect(() => {
+        fetchCities();
+    }, []);
+
+    const handleAddClick = () => setShowInput(true);
+
+    const handleSaveClick = async () => {
+        if (!newCity.name.trim() || !newCity.country.trim()) {
+            alert("City name and country cannot be empty.");
+            return;
+        }
+
+        try {
+            await axios.post('http://localhost:8080/api/cities', newCity);
+            setNewCity({ name: '', country: '' });
+            setShowInput(false);
+            fetchCities();
+        } catch (err) {
+            console.error("Şehir eklenemedi:", err);
+            alert("City could not be added.");
+        }
     };
 
+    const handleRemoveClick = async (id) => {
+        try {
+            await axios.delete(`http://localhost:8080/api/cities/${id}`);
+            fetchCities();
+        } catch (err) {
+            console.error("Şehir silinemedi:", err);
+            alert("City could not be deleted.");
+        }
+    };
 
     return (
-        <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} direction="column"
-            sx={{
-                justifyContent: "flex-start",
-                alignItems: "stretch",
-            }}>
-            <Grid container size={{ xs: 4, sm: 8, md: 12, lg: 12 }} direction="column"
-                sx={{
-                    justifyContent: "flex-start",
-                    alignItems: "stretch",
-                }}>
-                <Grid container size={{ xs: 4, sm: 8, md: 12, lg: 12 }} direction="row"
-                    sx={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}>
+        <Grid container spacing={2} direction="column" sx={{ p: 2 }}>
 
-                    {destinations.map((destination) => (<Grid size={{ xs: 12, sm: 8, md: 4, lg: 4 }} key={destination.id}>
-                        <Item direction="row"
-                            sx={{
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}>
-
+            <Grid container spacing={2} justifyContent="center">
+                {cities.map((city) => (
+                    <Grid item xs={12} md={4} key={city.id}>
+                        <Item>
                             <CardMedia
                                 component="img"
-                                alt="SupportProfile"
-
+                                alt="Destination"
                                 image={Antalya}
-                                sx={{
-                                    width: '100%',
-                                    height: "auto",
-                                    objectFit: "contain",
-
-                                }}
+                                sx={{ width: '100%', height: 150, objectFit: 'cover', mb: 1 }}
                             />
-                            <Typography>{destination.city}</Typography>
-                            <Divider></Divider>
-                            <Typography>{destination.country}</Typography>
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                            <Typography variant="h6">{city.name}</Typography>
+                            <Divider sx={{ my: 1 }} />
+                            <Typography variant="body2">{city.country}</Typography>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
                                 <Fab
                                     size="small"
                                     aria-label="remove"
                                     sx={{ backgroundColor: '#d84315' }}
-                                    onClick={() => handleRemoveClick(destination.id)}
+                                    onClick={() => handleRemoveClick(city.id)}
                                 >
                                     <RemoveIcon />
                                 </Fab>
                             </Box>
-
                         </Item>
-                    </Grid>))}
-
-                </Grid>
-
-
+                    </Grid>
+                ))}
             </Grid>
 
-            <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} direction="row"
-                sx={{
-                    justifyContent: "space-evenly",
-                    alignItems: "center",
-                }}>
-                <Grid size={{ xs: 4, sm: 8, md: 12, lg: 12 }}></Grid>
-                <Grid size={{ xs: 4, sm: 8, md: 12, lg: 12 }} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Box sx={{ '& > :not(style)': { m: 1 } }}>
-                        {!showInput && (
-                            <Fab aria-label="add" sx={{ backgroundColor: '#2e7d32' }} onClick={handleAddClick}>
-                                <AddIcon />
-                            </Fab>
-                        )}
-                        {showInput && (
-                            <Fab variant="extended" onClick={handleSaveClick}>
-                                <CheckIcon sx={{ mr: 1 }} />
-                                Save
-                            </Fab>
-                        )}
 
-                    </Box>
-                </Grid>
+            <Grid item sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+                {!showInput ? (
+                    <Fab aria-label="add" sx={{ backgroundColor: '#2e7d32' }} onClick={handleAddClick}>
+                        <AddIcon />
+                    </Fab>
+                ) : (
+                    <Fab variant="extended" onClick={handleSaveClick}>
+                        <CheckIcon sx={{ mr: 1 }} />
+                        Save
+                    </Fab>
+                )}
             </Grid>
-            {showInput && (<Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} ddirection="row"
-                sx={{
-                    justifyContent: "space-evenly",
-                    alignItems: "center",
-                }}>
-                <Grid container spacing={2} size={{ xs: 4, sm: 8, md: 12, lg: 12 }} direction="row"
-                    sx={{
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                    }}>
-                    <TextField
-                        required
-                        id="outlined-required"
-                        label="City"
-                        value={newDestination.city}
-                        onChange={(e) => setNewDestination({ ...newDestination, city: e.target.value })}
-                        sx={{ width: '49%' }}
-                    />
-                    <TextField
-                        required
-                        id="outlined-required"
-                        label="Country"
-                        value={newDestination.country}
-                        onChange={(e) => setNewDestination({ ...newDestination, country: e.target.value })}
-                        sx={{ width: '49%' }}
-                    />
 
+
+            {showInput && (
+                <Grid container spacing={2} mt={1}>
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            fullWidth
+                            label="City Name"
+                            value={newCity.name}
+                            onChange={(e) => setNewCity({ ...newCity, name: e.target.value })}
+                            required
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            fullWidth
+                            label="Country"
+                            value={newCity.country}
+                            onChange={(e) => setNewCity({ ...newCity, country: e.target.value })}
+                            required
+                        />
+                    </Grid>
                 </Grid>
-
-            </Grid>)}
-
+            )}
         </Grid>
-    )
-}
+    );
+};
 
-export default AdminAddDestination
+export default AdminAddDestination;
