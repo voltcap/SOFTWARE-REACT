@@ -1,21 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { Container, Grid, Button, Typography, Box, MenuItem, Select } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 import seat1 from '../assets/seat1.png';
 import seat2 from '../assets/seat2.png';
 import seat3 from '../assets/seat3.png';
 
 const SeatSelectionPage = () => {
-    const rows = 6;
-    const cols = 3;
-    const bookedSeats = ["1A", "1B",];
+    const { flightId } = useParams();
+    const navigate = useNavigate();
+
+    const [flight, setFlight] = useState(null);
+    const [bookedSeats, setBookedSeats] = useState([]);
+    const [availableSeats, setAvailableSeats] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]);
-    const [timeLeft, setTimeLeft] = useState(600);
     const [passengerCount, setPassengerCount] = useState(1);
-    const [confirmedSeats, setConfirmedSeats] = useState([]);
+    const [timeLeft, setTimeLeft] = useState(600);
 
     const rowLabels = ["1", "2", "3", "4", "5", "6"];
     const columnLabels = ["A", "B", "C", "D", "E", "F"];
+
+    useEffect(() => {
+        const fetchFlight = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/flights/${flightId}`);
+                setFlight(response.data);
+
+                if (response.data.seats) {
+                    const reserved = response.data.seats
+                        .filter((seat) => seat.reserved)
+                        .map((seat) => seat.seatNumber);
+                    setBookedSeats(reserved);
+                    setAvailableSeats(response.data.seats);
+                }
+            } catch (error) {
+                console.error("Error fetching flight data:", error);
+            }
+        };
+        fetchFlight();
+    }, [flightId]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -38,15 +61,16 @@ const SeatSelectionPage = () => {
     const handleSeatClick = (seatLabel) => {
         if (bookedSeats.includes(seatLabel)) return;
 
-        if (selectedSeats.includes(seatLabel)) {
-            setSelectedSeats(selectedSeats.filter((seat) => seat !== seatLabel));
-        } else if (selectedSeats.length < passengerCount) {
-            setSelectedSeats([...selectedSeats, seatLabel]);
-        }
-    };
+        const seatObj = availableSeats.find((s) => s.seatNumber === seatLabel);
+        if (!seatObj) return;
 
-    const confirmSelection = () => {
-        setConfirmedSeats([...selectedSeats]);
+        const alreadySelected = selectedSeats.find((s) => s.seatNumber === seatLabel);
+
+        if (alreadySelected) {
+            setSelectedSeats(selectedSeats.filter((s) => s.seatNumber !== seatLabel));
+        } else if (selectedSeats.length < passengerCount) {
+            setSelectedSeats([...selectedSeats, seatObj]);
+        }
     };
 
     const formatTime = () => {
@@ -60,42 +84,34 @@ const SeatSelectionPage = () => {
     const businessSeatCost = 25;
 
     const calculateTotalCost = () => {
-        const businessSeats = selectedSeats.filter((seat) => seat.startsWith("1"));
-        const economySeats = selectedSeats.filter((seat) => !seat.startsWith("1"));
+        const businessSeats = selectedSeats.filter((seat) => seat.seatNumber.startsWith("1"));
+        const economySeats = selectedSeats.filter((seat) => !seat.seatNumber.startsWith("1"));
         return flightCost + businessSeats.length * businessSeatCost + economySeats.length * economySeatCost;
     };
 
-    const navigate = useNavigate();
+    const confirmSelection = () => {
+        navigate("/PersonalInfo", { state: { selectedSeats } });
+    };
+
+    if (!flight) {
+        return (
+            <Container>
+                <Typography variant="h6" align="center" sx={{ mt: 4 }}>
+                    Loading flight...
+                </Typography>
+            </Container>
+        );
+    }
 
     return (
-        <Box
-            sx={{
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                minHeight: "100vh",
-                padding: 0,
-                overflow: "hidden",
-                position: "relative",
-            }}
-        >
-            <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1, mt: 4 }}>
+        <Box sx={{ backgroundSize: "cover", backgroundPosition: "center", minHeight: "100vh", padding: 0, overflow: "hidden", position: "relative" }}>
+            <Container maxWidth="lg" sx={{ mt: 4 }}>
                 <Grid container spacing={4}>
                     <Grid item xs={8}>
-                        <Box
-                            sx={{
-                                backgroundColor: "white",
-                                borderRadius: 4,
-                                Border: 1,
-
-                                borderColor: "gray",
-                                padding: 3,
-                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                            }}
-                        >
+                        <Box sx={{ backgroundColor: "white", borderRadius: 4, padding: 3, boxShadow: 2 }}>
                             <Typography variant="h5" gutterBottom sx={{ textAlign: "center", mb: 3 }}>
-                                Select Your Seat
+                                Select Your Seat for {flight.origin} → {flight.destination}
                             </Typography>
-
                             <Select
                                 value={passengerCount}
                                 onChange={(e) => setPassengerCount(e.target.value)}
@@ -107,29 +123,16 @@ const SeatSelectionPage = () => {
                                     </MenuItem>
                                 ))}
                             </Select>
-
                             <Grid container spacing={1} justifyContent="center">
-                                {rowLabels.map((rowLabel, row) => (
-                                    <Grid container item key={row} spacing={3} justifyContent="center" alignItems="center">
-                                        <Grid item sx={{ width: 30, textAlign: "center" }}>
-                                            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-                                                {rowLabel}
-                                            </Typography>
-                                        </Grid>
-                                        {[...Array(cols)].map((_, col) => {
-                                            const seatLabel = `${rowLabel}${columnLabels[col]}`;
+                                {rowLabels.map((rowLabel) => (
+                                    <Grid container item key={rowLabel} spacing={2} justifyContent="center">
+                                        {columnLabels.map((colLabel) => {
+                                            const seatLabel = `${rowLabel}${colLabel}`;
                                             const isBooked = bookedSeats.includes(seatLabel);
-                                            const isSelected = selectedSeats.includes(seatLabel);
-
-                                            let seatImage;
-                                            if (isBooked) {
-                                                seatImage = seat3;
-                                            } else if (isSelected) {
-                                                seatImage = row === 0 ? seat2 : seat2;
-                                            } else {
-                                                seatImage = row === 0 ? seat1 : seat1;
-                                            }
-
+                                            const isSelected = selectedSeats.some((s) => s.seatNumber === seatLabel);
+                                            let seatImage = seat1;
+                                            if (isBooked) seatImage = seat3;
+                                            else if (isSelected) seatImage = seat2;
                                             return (
                                                 <Grid item key={seatLabel}>
                                                     <Button
@@ -140,42 +143,7 @@ const SeatSelectionPage = () => {
                                                             minHeight: 50,
                                                             padding: 0,
                                                             background: "transparent",
-                                                            "&:hover": { background: "transparent" },
-                                                        }}
-                                                    >
-                                                        <img src={seatImage} alt={`Seat ${seatLabel}`} width="40" />
-                                                    </Button>
-                                                </Grid>
-                                            );
-                                        })}
-
-                                        <Grid item sx={{ width: 30 }}></Grid>
-
-                                        {[...Array(cols)].map((_, col) => {
-                                            const seatLabel = `${rowLabel}${columnLabels[col + 3]}`;
-                                            const isBooked = bookedSeats.includes(seatLabel);
-                                            const isSelected = selectedSeats.includes(seatLabel);
-
-                                            let seatImage;
-                                            if (isBooked) {
-                                                seatImage = seat3;
-                                            } else if (isSelected) {
-                                                seatImage = row === 0 ? seat2 : seat2;
-                                            } else {
-                                                seatImage = row === 0 ? seat1 : seat1;
-                                            }
-
-                                            return (
-                                                <Grid item key={seatLabel}>
-                                                    <Button
-                                                        onClick={() => handleSeatClick(seatLabel)}
-                                                        disabled={isBooked}
-                                                        sx={{
-                                                            minWidth: 50,
-                                                            minHeight: 50,
-                                                            padding: 0,
-                                                            background: "transparent",
-                                                            "&:hover": { background: "transparent" },
+                                                            "&:hover": { background: "transparent" }
                                                         }}
                                                     >
                                                         <img src={seatImage} alt={`Seat ${seatLabel}`} width="40" />
@@ -188,81 +156,33 @@ const SeatSelectionPage = () => {
                             </Grid>
                         </Box>
                     </Grid>
-
                     <Grid item xs={4}>
-                        <Box
-                            sx={{
-                                backgroundColor: "white",
-                                borderRadius: 4,
-                                borderColor: "gray",
-                                padding: 3,
-                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                            }}
-                        >
-                            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                                <Box
-                                    component="img"
-                                    src="https://cdn-icons-png.flaticon.com/512/9187/9187604.png"
-                                    alt="User Icon"
-                                    sx={{ height: 40, width: 40, mr: 2 }}
-                                />
-                                <Box>
-                                    <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-                                        IGGY POP
+                        <Box sx={{ backgroundColor: "white", borderRadius: 4, padding: 3, boxShadow: 2 }}>
+                            <Typography variant="h6" gutterBottom>Selected Seats:</Typography>
+                            {selectedSeats.length > 0 ? (
+                                selectedSeats.map((seat) => (
+                                    <Typography key={seat.seatNumber}>
+                                        {seat.seatNumber} - {seat.seatNumber.startsWith("1") ? "Business (£25)" : "Economy (£11)"}
                                     </Typography>
-                                    <Typography variant="body1" sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                                        <span>Istanbul - London LHR</span>
-                                    </Typography>
-                                    <Typography variant="body1" sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-                                        📅 25th April 2025
-                                    </Typography>
-                                </Box>
-                            </Box>
-
-                            <Typography variant="h6" sx={{ mb: 2 }}>
-                                Flight Cost: £65
-                            </Typography>
-
-                            <Box mt={3}>
-                                <Typography variant="h6">Selected Seats:</Typography>
-                                {selectedSeats.map((seat) => (
-                                    <Typography key={seat}>
-                                        {seat} - {seat.startsWith("1") ? "Business Class (£25)" : "Economy (£11)"}
-                                    </Typography>
-                                ))}
-                                {selectedSeats.length === 0 && <Typography>None</Typography>}
-                            </Box>
-
-                            <Box mt={3}>
-                                <Typography variant="h6">Total Cost:</Typography>
-                                <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                                    £{calculateTotalCost()}
-                                </Typography>
-                            </Box>
-
-                            <Box mt={2}>
-                                <Button
-                                    variant="contained"
-                                    onClick={() => {
-                                        confirmSelection();
-                                        navigate("/PersonalInfo");
-                                    }}
-                                    disabled={selectedSeats.length === 0}
-                                    fullWidth
-                                >
-                                    Confirm Seat Selection
-                                </Button>
-                            </Box>
-
-                            <Box mt={3}>
-                                <Typography variant="h6">Confirmed Seats:</Typography>
-                                <Typography>{confirmedSeats.length > 0 ? confirmedSeats.join(", ") : "None"}</Typography>
-                            </Box>
+                                ))
+                            ) : (
+                                <Typography>No seat selected</Typography>
+                            )}
+                            <Typography variant="h6" sx={{ mt: 3 }}>Total Cost:</Typography>
+                            <Typography variant="h5" sx={{ fontWeight: "bold" }}>£{calculateTotalCost()}</Typography>
+                            <Button
+                                variant="contained"
+                                onClick={confirmSelection}
+                                disabled={selectedSeats.length === 0}
+                                fullWidth
+                                sx={{ mt: 2 }}
+                            >
+                                Confirm Seat Selection
+                            </Button>
                         </Box>
                     </Grid>
                 </Grid>
             </Container>
-
             <Box
                 sx={{
                     position: "fixed",

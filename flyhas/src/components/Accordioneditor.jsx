@@ -1,62 +1,121 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Button from '@mui/material/Button';
 import AccordionActions from '@mui/material/AccordionActions';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import axios from 'axios';
 
-const Accordioneditor = () => {
+const Accordioneditor = ({ onSearch }) => {
+    const [cityList, setCityList] = useState([]);
+    const [formValues, setFormValues] = useState({
+        from: "",
+        to: "",
+        date: "2025-04-25",
+        passengers: 1
+    });
+
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/cities')
+            .then((res) => {
+                setCityList(res.data);
+                if (res.data.length >= 2) {
+                    setFormValues((prev) => ({
+                        ...prev,
+                        from: res.data[0].name,
+                        to: res.data[1].name
+                    }));
+                }
+            })
+            .catch((err) => console.error("Error fetching cities", err));
+    }, []);
+
+    const handleChange = (e) => {
+        setFormValues({
+            ...formValues,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSearch = () => {
+        onSearch(formValues);
+    };
+
     return (
-        <div>
-            <Accordion sx={{ backgroundColor: "rgb(255, 255, 255)", }}>
-                <AccordionSummary
-                    expandIcon={<ArrowDownwardIcon />}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                >
-                    <Typography component="span">Edit Flight Informations</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'flex-start' }}>
-                        <TextField
-                            label="From"
-                            defaultValue="İstanbul"
-                            slotProps={{ readOnly: true }}
-                            sx={{ width: '48%' }}
-                        />
-                        <TextField
-                            label="To"
-                            defaultValue="Ankara"
-                            slotProps={{ readOnly: true }}
-                            sx={{ width: '48%' }}
-                        />
-                        <TextField
-                            label="Date"
-                            defaultValue="2025/03/15"
-                            slotProps={{ readOnly: true }}
-                            sx={{ width: '48%' }}
-                        />
-                        <TextField
-                            label="People"
-                            defaultValue="1"
-                            slotProps={{ readOnly: true }}
-                            sx={{ width: '48%' }}
-                        />
-                    </div>
-                </AccordionDetails>
-                <AccordionActions>
-                    <Button>Agreee</Button>
-                </AccordionActions>
+        <Accordion sx={{ backgroundColor: "#fff" }}>
+            <AccordionSummary expandIcon={<ArrowDownwardIcon />}>
+                <Typography component="span">Edit Flight Informations</Typography>
+            </AccordionSummary>
 
-            </Accordion>
+            <AccordionDetails>
+                <Box display="flex" flexWrap="wrap" gap={2}>
+                    <TextField
+                        select
+                        label="From"
+                        name="from"
+                        value={formValues.from}
+                        onChange={handleChange}
+                        sx={{ width: '48%' }}
+                    >
+                        {cityList.map((city) => (
+                            <MenuItem key={city.id} value={city.name}>
+                                {city.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
 
-        </div>
-    )
-}
+                    <TextField
+                        select
+                        label="To"
+                        name="to"
+                        value={formValues.to}
+                        onChange={handleChange}
+                        sx={{ width: '48%' }}
+                    >
+                        {cityList
+                            .filter((city) => city.name !== formValues.from)
+                            .map((city) => (
+                                <MenuItem key={city.id} value={city.name}>
+                                    {city.name}
+                                </MenuItem>
+                            ))}
+                    </TextField>
 
-export default Accordioneditor
+                    <TextField
+                        type="date"
+                        label="Date"
+                        name="date"
+                        value={formValues.date}
+                        onChange={handleChange}
+                        InputLabelProps={{ shrink: true }}
+                        sx={{ width: '48%' }}
+                    />
+
+                    <TextField
+                        type="number"
+                        label="People"
+                        name="passengers"
+                        value={formValues.passengers}
+                        onChange={handleChange}
+                        inputProps={{ min: 1, max: 6 }}
+                        sx={{ width: '48%' }}
+                    />
+                </Box>
+            </AccordionDetails>
+
+            <AccordionActions>
+                <Button variant="contained" onClick={handleSearch}>
+                    Search
+                </Button>
+            </AccordionActions>
+        </Accordion>
+    );
+};
+
+export default Accordioneditor;

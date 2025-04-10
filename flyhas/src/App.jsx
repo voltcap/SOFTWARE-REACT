@@ -56,7 +56,7 @@ function App() {
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/FlightList' element={<Flightlistpage />} />
-            <Route path='/Seats' element={<SeatSelectionPage />} />
+            <Route path="/Seats/:flightId" element={<SeatSelectionPage />} />
             <Route path='/Checkout' element={<CheckoutPage />} />
             <Route path='/Register' element={<RegisterPage />} />
             <Route path='/Login' element={<LoginPage />} />

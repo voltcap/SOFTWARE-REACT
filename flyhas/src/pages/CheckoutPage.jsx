@@ -1,324 +1,223 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-    Container, Grid, Typography, Box, Dialog, DialogTitle, DialogContent, DialogActions, CircularProgress, IconButton, InputAdornment, TextField, Button,
+    Container, Grid, Typography, Box, Dialog, DialogTitle, DialogContent, DialogActions,
+    CircularProgress, IconButton, InputAdornment, TextField, Button
 } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useNavigate, useLocation } from "react-router-dom";
+import ReservationService from "../services/ReservationService";
+import PaymentService from "../services/PaymentService";
+import { getUserFromToken } from "../services/decodeToken";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
     const navigate = useNavigate();
-    const selectedSeats = ["1A", "1B"];
-    const passengerInfo = [
-        {
-            seat: "2A",
-            name: "iggy pop",
-            email: "iggypop@yahoo.com",
-            passport: "123456",
-        },
-        {
-            seat: "3B",
-            name: "moneypenny",
-            email: "moneypenny@yahoo.com",
-            passport: "78910",
-        },
-    ];
+    const location = useLocation();
 
-    const reservationNumber = "ISTLDN25";
+    const passengers = location.state?.passengers || [];
+    const selectedSeats = location.state?.selectedSeats || [];
 
     const [cardDetails, setCardDetails] = useState({
         cardNumber: "",
         expiryDate: "",
         cvv: "",
     });
-
     const [showCvv, setShowCvv] = useState(false);
     const [showBack, setShowBack] = useState(false);
     const [openConfirmation, setOpenConfirmation] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    const totalCost =
+        65 +
+        selectedSeats.reduce(
+            (acc, seat) => acc + (seat.seatNumber?.startsWith("1") ? 25 : 11),
+            0
+        );
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setCardDetails({ ...cardDetails, [name]: value });
     };
 
-    useEffect(() => {
-        if (cardDetails.cvv.length === 3) {
-            const timeout = setTimeout(() => {
-                handleConfirmPayment();
-            }, 1000);
-            return () => clearTimeout(timeout);
-        }
-    }, [cardDetails.cvv]);
+    const handleConfirmPayment = async () => {
+        if (!cardDetails.cardNumber || !cardDetails.expiryDate || !cardDetails.cvv) return;
 
-    const handleConfirmPayment = () => {
-        if (cardDetails.cardNumber && cardDetails.expiryDate && cardDetails.cvv) {
-            setIsLoading(true);
-            setTimeout(() => {
-                setIsLoading(false);
-                setOpenConfirmation(true);
-            }, 2000);
+        setIsLoading(true);
+
+        try {
+            const user = getUserFromToken();
+            const reservedBy = user?.sub || "";
+
+            const reservationData = selectedSeats.map((seat, index) => ({
+                seatId: seat.id,
+                firstName: passengers[index].firstName,
+                lastName: passengers[index].lastName,
+                email: passengers[index].email,
+                birthDate: passengers[index].birthDate,
+                nationalId: passengers[index].nationalId,
+                reservedBy: reservedBy,
+            }));
+
+            console.log("Sending reservationData to backend:", reservationData);
+
+            const reservationResponse = await ReservationService.submitReservation(reservationData);
+
+            console.log("Received reservation response:", reservationResponse);
+
+            const reservationId = reservationResponse?.data?.[0]?.id;
+            console.log("Extracted reservationId:", reservationId);
+
+            await PaymentService.makePayment({
+                cardNumber: cardDetails.cardNumber,
+                expiryDate: cardDetails.expiryDate,
+                cvv: cardDetails.cvv,
+                reservationId: reservationId,
+            });
+
+            console.log("Payment successfully sent!");
+
+            setIsLoading(false);
+            setOpenConfirmation(true);
+        } catch (error) {
+            console.error("Reservation or Payment Error:", error);
+            console.log("Axios error response:", error?.response);
+            setIsLoading(false);
+            alert("Something went wrong. Please try again.");
         }
     };
 
     const handleCloseConfirmation = () => {
         setOpenConfirmation(false);
-    };
-
-    const flightCost = 65;
-    const economySeatCost = 11;
-    const businessSeatCost = 25;
-
-    const calculateTotalCost = () => {
-        const businessSeats = selectedSeats.filter((seat) => seat.startsWith("1"));
-        const economySeats = selectedSeats.filter((seat) => !seat.startsWith("1"));
-        return (
-            flightCost +
-            businessSeats.length * businessSeatCost +
-            economySeats.length * economySeatCost
-        );
+        navigate("/UserProfile/Reservations");
     };
 
     return (
-        <Box
-            sx={{
-
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                minHeight: "100vh",
-                padding: 0,
-                overflow: "hidden",
-                position: "relative",
-            }}
-        >
-            <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1, mt: 4 }}>
+        <Box sx={{ minHeight: "100vh", padding: 0 }}>
+            <Container maxWidth="lg" sx={{ mt: 4 }}>
                 <Grid container spacing={4}>
                     <Grid item xs={8}>
-                        <Box
-                            sx={{
-                                backgroundColor: "rgba(255, 255, 255, 1)",
-                                borderRadius: 4,
-                                borderColor: "gray",
-                                padding: 3,
-                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                            }}
-                        >
-                            <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
+                        <Box sx={{ backgroundColor: "white", borderRadius: 4, padding: 3 }}>
+                            <Typography variant="h4" gutterBottom fontWeight="bold">
                                 Reservation Summary
                             </Typography>
 
-                            <Typography variant="h6" sx={{ mb: 3 }}>
-                                Flight: <strong>Istanbul - London LHR</strong>
-                            </Typography>
-
-                            <Typography variant="h6" sx={{ mb: 3 }}>
-                                Reservation Number: <strong>{reservationNumber}</strong>
-                            </Typography>
-
-                            {passengerInfo.map((passenger, index) => (
-                                <Box key={index} sx={{ mb: 4 }}>
-                                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                                        Seat: {passenger.seat}
-                                    </Typography>
-                                    <Typography variant="body1">
-                                        <strong>Name:</strong> {passenger.name}
-                                    </Typography>
-                                    <Typography variant="body1">
-                                        <strong>Email:</strong> {passenger.email}
-                                    </Typography>
-                                    <Typography variant="body1">
-                                        <strong>Passport:</strong> {passenger.passport}
-                                    </Typography>
+                            {passengers.map((p, index) => (
+                                <Box key={index} mt={2}>
+                                    <Typography><strong>Seat:</strong> {selectedSeats[index].seatNumber}</Typography>
+                                    <Typography><strong>Name:</strong> {p.firstName} {p.lastName}</Typography>
+                                    <Typography><strong>Email:</strong> {p.email}</Typography>
+                                    <Typography><strong>Birth Date:</strong> {p.birthDate}</Typography>
+                                    <Typography><strong>National ID:</strong> {p.nationalId}</Typography>
                                 </Box>
                             ))}
 
-                            <Typography variant="h6" sx={{ mt: 3 }}>
-                                Booking Cost:
-                            </Typography>
-                            <Box sx={{ ml: 2 }}>
-                                <Typography variant="body1">
-                                    Flight Cost: <strong>£{flightCost}</strong>
-                                </Typography>
-                                {selectedSeats.map((seat) => (
-                                    <Typography key={seat} variant="body1">
-                                        Seat {seat}:{" "}
-                                        <strong>
-                                            £{seat.startsWith("1") ? businessSeatCost : economySeatCost}
-                                        </strong>
-                                    </Typography>
-                                ))}
-                                <Typography variant="body1" sx={{ mt: 1 }}>
-                                    Total Cost: <strong>£{calculateTotalCost()}</strong>
-                                </Typography>
+                            <Box mt={3}>
+                                <Typography variant="h6">Total Cost: <strong>£{totalCost}</strong></Typography>
                             </Box>
                         </Box>
                     </Grid>
 
                     <Grid item xs={4}>
-                        <Box
-                            sx={{
-                                perspective: "1000px",
-                                marginLeft: "auto",
-                                width: "90%",
-
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    position: "relative",
+                        <Box sx={{ perspective: "1000px", width: "100%" }}>
+                            <Box sx={{
+                                position: "relative",
+                                width: "100%",
+                                height: "210px",
+                                transformStyle: "preserve-3d",
+                                transform: showBack ? "rotateY(180deg)" : "rotateY(0)",
+                                transition: "transform 0.6s",
+                            }}>
+                                {/* Kart Ön */}
+                                <Box sx={{
+                                    position: "absolute",
                                     width: "100%",
-                                    height: "210px",
-                                    transformStyle: "preserve-3d",
-                                    transform: showBack ? "rotateY(180deg)" : "rotateY(0)",
-                                    transition: "transform 0.6s",
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        position: "absolute",
-                                        width: "100%",
-                                        height: "100%",
-                                        backfaceVisibility: "hidden",
-                                        backgroundColor: "white",
-                                        borderRadius: "8px",
-                                        padding: "16px",
-                                        color: "black",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "space-between",
-                                        borderColor: "gray",
-                                        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                                    }}
-                                >
-                                    <Typography variant="h6">Card Number</Typography>
+                                    height: "100%",
+                                    backfaceVisibility: "hidden",
+                                    backgroundColor: "white",
+                                    borderRadius: 2,
+                                    padding: 2,
+                                    boxShadow: 3,
+                                }}>
+                                    <Typography>Card Number</Typography>
                                     <TextField
-                                        fullWidth
-                                        name="cardNumber"
+                                        fullWidth name="cardNumber"
                                         value={cardDetails.cardNumber}
                                         onChange={handleInputChange}
                                         sx={{ mb: 2 }}
                                     />
+                                    <Typography>Expiry Date (MM/YY)</Typography>
                                     <TextField
-                                        fullWidth
-                                        label="Expiry Date (MM/YY)"
-                                        name="expiryDate"
+                                        fullWidth name="expiryDate"
                                         value={cardDetails.expiryDate}
                                         onChange={handleInputChange}
-                                        sx={{ mb: 2, display: showBack ? "none" : "block" }}
                                     />
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => setShowBack(true)}
-                                    >
+                                    <Button variant="contained" onClick={() => setShowBack(true)} sx={{ mt: 2 }}>
                                         Enter CVV
                                     </Button>
                                 </Box>
 
-                                <Box
-                                    sx={{
-                                        position: "absolute",
-                                        width: "100%",
-                                        height: "100%",
-                                        backfaceVisibility: "hidden",
-                                        backgroundColor: "white",
-                                        borderRadius: "8px",
-                                        padding: "16px",
-                                        color: "black",
-                                        transform: "rotateY(180deg)",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "space-between",
-                                        borderColor: "gray",
-                                        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-                                    }}
-                                >
-                                    <Typography variant="h6">CVV</Typography>
+                                {/* Kart Arka */}
+                                <Box sx={{
+                                    position: "absolute",
+                                    width: "100%",
+                                    height: "100%",
+                                    backfaceVisibility: "hidden",
+                                    transform: "rotateY(180deg)",
+                                    backgroundColor: "white",
+                                    borderRadius: 2,
+                                    padding: 2,
+                                    boxShadow: 3,
+                                }}>
+                                    <Typography>CVV</Typography>
                                     <TextField
-                                        fullWidth
-                                        name="cvv"
+                                        fullWidth name="cvv"
                                         type={showCvv ? "text" : "password"}
                                         value={cardDetails.cvv}
                                         onChange={handleInputChange}
                                         InputProps={{
                                             endAdornment: (
                                                 <InputAdornment position="end">
-                                                    <IconButton
-                                                        onClick={() => setShowCvv(!showCvv)}
-                                                        edge="end"
-                                                    >
+                                                    <IconButton onClick={() => setShowCvv(!showCvv)}>
                                                         {showCvv ? <VisibilityOffIcon /> : <VisibilityIcon />}
                                                     </IconButton>
                                                 </InputAdornment>
                                             ),
                                         }}
                                     />
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => setShowBack(false)}
-                                    >
-                                        Back to Front
+                                    <Button variant="outlined" onClick={() => setShowBack(false)} sx={{ mt: 2 }}>
+                                        Back
                                     </Button>
-                                    <Button
-                                        variant="contained"
-                                        fullWidth
-                                        sx={{ mt: 2 }}
-                                        onClick={handleConfirmPayment}
-                                    >
+                                    <Button variant="contained" onClick={handleConfirmPayment} sx={{ mt: 2 }} fullWidth>
                                         Confirm Payment
                                     </Button>
                                 </Box>
-
                             </Box>
                         </Box>
                     </Grid>
                 </Grid>
             </Container>
 
+            {/* Yükleniyor */}
             {isLoading && (
-                <Box
-                    sx={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundColor: "rgba(255, 255, 255, 0.8)",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        zIndex: 3,
-                    }}
-                >
-                    <CircularProgress size={60} />
+                <Box sx={{
+                    position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: "rgba(255, 255, 255, 0.7)",
+                    display: "flex", justifyContent: "center", alignItems: "center", zIndex: 5
+                }}>
+                    <CircularProgress />
                 </Box>
             )}
 
+            {/* Onay Penceresi */}
             <Dialog open={openConfirmation} onClose={handleCloseConfirmation}>
-                <DialogTitle>Booking Confirmed</DialogTitle>
+                <DialogTitle>Reservation Completed</DialogTitle>
                 <DialogContent>
-                    <Typography variant="body1" sx={{ mb: 2 }}>
-                        Enjoy the flight!
-                    </Typography>
-                    <Typography variant="body1" sx={{ mb: 2 }}>
-                        <strong>Reservation Number:</strong> {reservationNumber}
-                    </Typography>
-                    <Typography variant="body1" sx={{ mb: 2 }}>
-                        <strong>Flight:</strong> Istanbul - London LHR
-                    </Typography>
-                    <Typography variant="body1" sx={{ mb: 2 }}>
-                        <strong>Date:</strong> 25th April 2025
-                    </Typography>
-                    <Typography variant="body1" sx={{ mb: 2 }}>
-                        <strong>Total Cost:</strong> £{calculateTotalCost()}
-                    </Typography>
+                    <Typography>Thank you! Your booking has been confirmed.</Typography>
+                    <Typography><strong>Total Paid:</strong> £{totalCost}</Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => {
-                        handleCloseConfirmation();
-                        navigate("/UserProfile/Reservations");
-                    }} color="primary">
-                        Close
+                    <Button onClick={handleCloseConfirmation} autoFocus>
+                        Go to Reservations
                     </Button>
                 </DialogActions>
             </Dialog>

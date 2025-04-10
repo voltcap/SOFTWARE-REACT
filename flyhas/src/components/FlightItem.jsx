@@ -1,97 +1,72 @@
-import React from 'react';
-import Grid from '@mui/material/Grid2';
-import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import SendIcon from '@mui/icons-material/Send';
-import flight2 from '../assets/Flight2.png';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Box, Grid, Typography, Paper, Button } from "@mui/material";
+import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
 import { useNavigate } from "react-router-dom";
-import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
-
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Şeffaflık azaltıldı
-    backdropFilter: 'blur(8px)', // Blur efekti eklendi
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '70%',
-}));
-
-const RightFlatItem = styled(Item)(({ theme }) => ({
-    borderTopRightRadius: '0',
-    borderBottomRightRadius: '0',
-    borderRight: '0',
-}));
-
-const LeftFlatItem = styled(Item)(({ theme }) => ({
-    borderTopLeftRadius: '0',
-    borderBottomLeftRadius: '0',
-    borderLeft: '0',
-}));
-
-const AllFlatItem = styled(Item)(({ theme }) => ({
-    borderRadius: '0',
-    borderLeft: '0',
-    borderRight: '0',
-}));
 
 const FlightItem = ({ flight }) => {
     const navigate = useNavigate();
+
+    if (!flight) return null;
+
     return (
+        <Paper
+            elevation={3}
+            sx={{
+                p: 2,
+                mb: 2,
+                borderRadius: 3,
+                backgroundColor: "#ffffff",
+                boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+            }}
+        >
+            <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12} sm={3}>
+                    <Typography variant="h6" fontWeight="bold">
+                        {flight.origin} → {flight.destination}
+                    </Typography>
+                </Grid>
 
-        <Grid container spacing={1} alignItems="stretch" sx={{ display: 'flex', flexGrow: 1 }}>
+                <Grid item xs={12} sm={3}>
+                    <Typography variant="body1">
+                        🛫 Departure:
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {new Date(flight.departureTime).toLocaleString()}
+                    </Typography>
+                </Grid>
 
-            <Grid container size={{ xs: 12, md: 5, lg: 8 }} spacing={0} alignItems="stretch" >
-                <Grid size={{ xs: 6, lg: 2 }}>
-                    <RightFlatItem elevation={0} >{flight.departure}</RightFlatItem>
+                <Grid item xs={12} sm={3}>
+                    <Typography variant="body1">
+                        🛬 Arrival:
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {new Date(flight.arrivalTime).toLocaleString()}
+                    </Typography>
                 </Grid>
-                <Grid size={{ xs: 6, lg: 2 }}>
-                    <AllFlatItem elevation={0}>{flight.from}</AllFlatItem>
+
+                <Grid item xs={12} sm={2}>
+                    <Typography variant="body1">
+                        Seats: {flight.seats.length}
+                    </Typography>
+                    <Typography variant="body1" color={flight.fullyBooked ? "error" : "green"}>
+                        {flight.fullyBooked ? "Fully Booked" : "Available"}
+                    </Typography>
                 </Grid>
-                <Grid size={{ xs: 6, lg: 3 }}>
-                    <AllFlatItem elevation={0}><Box
-                        component="img"
-                        src={flight2}
-                        alt="Flight Icon"
-                        sx={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "contain",
-                        }}
-                    /></AllFlatItem>
-                </Grid>
-                <Grid size={{ xs: 6, lg: 2 }}>
-                    <AllFlatItem elevation={0}>{flight.to}</AllFlatItem>
-                </Grid>
-                <Grid size={{ xs: 6, lg: 2 }}>
-                    <LeftFlatItem elevation={0}>{flight.landing}</LeftFlatItem>
+
+                <Grid item xs={12} sm={1}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={flight.fullyBooked}
+                        endIcon={<AirplaneTicketIcon />}
+                        onClick={() => navigate(`/Seats/${flight.id}`)}
+                        fullWidth
+                    >
+
+                    </Button>
                 </Grid>
             </Grid>
-
-
-            <Grid container size={{ xs: 12, md: 5, lg: 4 }} spacing={0} alignItems="stretch" >
-                <Grid size={{ xs: 6, lg: 6 }}>
-                    <RightFlatItem elevation={0}>{flight.price}</RightFlatItem>
-                </Grid>
-                <Grid size={{ xs: 6, lg: 6 }}>
-                    <LeftFlatItem elevation={0}>
-                        <Button variant="contained" endIcon={<AirplaneTicketIcon />} onClick={() => navigate("/Seats")}>
-
-                            Book
-
-                        </Button>
-                    </LeftFlatItem>
-                </Grid>
-            </Grid>
-        </Grid>
-
+        </Paper>
     );
 };
 
