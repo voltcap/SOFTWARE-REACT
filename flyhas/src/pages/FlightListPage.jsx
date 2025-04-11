@@ -12,7 +12,7 @@ import backgroundImage from '../assets/Morocco.jpg';
 import FlightSummary from '../components/FlightSummary';
 import FlightList from '../components/FlightList';
 
-const Flightlistpage = () => {
+const FlightListPage = () => {
     const [searchParams, setSearchParams] = useState({
         from: "İstanbul",
         to: "Ankara",

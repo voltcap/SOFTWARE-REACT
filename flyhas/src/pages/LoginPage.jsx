@@ -63,12 +63,16 @@ function LoginPage() {
 
     setLoading(true);
     try {
-      const { token, role } = await AuthService.login(
-        formData.email,
-        formData.password
-      );
+      const response = await AuthService.login(formData.email, formData.password);
 
-      // Rol bazlı yönlendirme
+      const token = response?.token;
+      const role = response?.role;
+
+      if (!token || !role) {
+        alert("Invalid login response. Please try again.");
+        return;
+      }
+
       if (role === "ADMIN") {
         navigate("/AdminProfile/MyProfile");
       } else if (role === "MANAGER") {
@@ -76,7 +80,7 @@ function LoginPage() {
       } else if (role === "CUSTOMER") {
         navigate("/UserProfile/MyProfile");
       } else {
-        alert("Unknown role");
+        alert("Unknown user role. Contact support.");
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -110,6 +114,7 @@ function LoginPage() {
         <Typography variant="h5" fontWeight="bold" color="primary" gutterBottom>
           Login
         </Typography>
+
         <Box component="form" sx={{ width: "100%" }}>
           <TextField
             fullWidth
@@ -121,6 +126,7 @@ function LoginPage() {
             error={!!errors.email}
             helperText={errors.email}
           />
+
           <TextField
             fullWidth
             label="Password"
@@ -166,6 +172,7 @@ function LoginPage() {
         <Typography sx={{ marginTop: 2 }}>
           Don’t you have account? Create new account
         </Typography>
+
         <Button
           fullWidth
           variant="contained"
@@ -185,4 +192,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-

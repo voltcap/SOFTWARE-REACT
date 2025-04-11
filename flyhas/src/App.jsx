@@ -6,7 +6,7 @@ import backgroundImage from './assets/Background.png';
 
 import { Routes, Route } from "react-router-dom";
 
-import Flightlistpage from './pages/FlightListPage'
+import FlightListPage from './pages/FlightListPage'
 import HomePage from './pages/HomePage'
 import Navbar from './components/Navbar'
 import NotFoundPage from './pages/NotFoundPage'
@@ -54,14 +54,16 @@ function App() {
         }}>
           <Routes>
             <Route path='/' element={<HomePage />} />
-            <Route path='/FlightList' element={<Flightlistpage />} />
-            <Route path="/Seats/:flightId" element={<SeatSelectionPage />} />
+            <Route path='/FlightList' element={<FlightListPage />} />
             <Route path='/Checkout' element={<CheckoutPage />} />
             <Route path='/Register' element={<RegisterPage />} />
             <Route path='/Login' element={<LoginPage />} />
             <Route path='/PersonalInfo' element={<PersonalInformationPage />} />
             
-           
+            <Route path="/Seats/:flightId" element={<PrivateRoute requiredRole="CUSTOMER" />}>
+              <Route path="" element={<SeatSelectionPage />} />
+            </Route>
+
             <Route path="/UserProfile/*" element={<PrivateRoute requiredRole="CUSTOMER" />}>
               <Route path="" element={<UserPage />}>
                 <Route path="MyProfile" element={<UserInfo />} />
@@ -69,8 +71,7 @@ function App() {
                 <Route path="Reservations" element={<UserReservations />} />
               </Route>
             </Route>
-            
-            
+
             <Route path="/AdminProfile/*" element={<PrivateRoute requiredRole="ADMIN" />}>
               <Route path="" element={<AdminPage />}>
                 <Route path="MyProfile" element={<AdminInfo />} />
@@ -81,31 +82,28 @@ function App() {
                 <Route path="Employees" element={<AdminShowEmployee />} />
               </Route>
             </Route>
-            
-            
+
             <Route path="/ManagerProfile/*" element={<PrivateRoute requiredRole="MANAGER" />}>
               <Route path="" element={<ManagerPage />}>
                 <Route path="MyProfile" element={<ManagerInfo />} />
                 <Route path="Support" element={<ManagerSupport />} />
-
               </Route>
             </Route>
-            
-            
+
             <Route path='/AboutUs' element={<AboutUs />} />
             <Route path='/Galleries' element={<GalleriesPage />} />
             <Route path='/OurPolicy' element={<OurPolicyPage />} />
             <Route path='/VisionMission' element={<VisionMissionPage />} />
             <Route path='/Services' element={<ServicesPage />} />
             <Route path='/CityGuide' element={<CityGuidePage />} />
-            
+
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </Box>
         <Footer />
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

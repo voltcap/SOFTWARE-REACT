@@ -1,23 +1,32 @@
-
 import axios from "axios";
 
 const API_URL = "http://localhost:8080/api/auth";
 
-// Login
 const login = (email, password) => {
-    return axios
-        .post(`${API_URL}/login`, { email, password }, {
-            headers: { "Content-Type": "application/json" },
-        })
-        .then((response) => {
-            if (response.data.token) {
-                localStorage.setItem("userToken", response.data.token);
-                localStorage.setItem("userRole", response.data.role);
-                localStorage.setItem("userEmail", response.data.email);
-                localStorage.setItem("userName", response.data.firstName);
-            }
-            return response.data;
-        });
+    const mockManager = {
+        email: "manager@flyhas.com",
+        password: "12345678@{_aA",
+        token: "007",
+        role: "MANAGER",
+        firstName: "Mai",
+    };
+
+    return new Promise((resolve, reject) => {
+        if (email === mockManager.email && password === mockManager.password) {
+            localStorage.setItem("userToken", mockManager.token);
+            localStorage.setItem("userRole", mockManager.role);
+            localStorage.setItem("userEmail", mockManager.email);
+            localStorage.setItem("userName", mockManager.firstName);
+            resolve({
+                token: mockManager.token,
+                role: mockManager.role,
+                email: mockManager.email,
+                firstName: mockManager.firstName,
+            });
+        } else {
+            reject(new Error("TRY AGAIN!"));
+        }
+    });
 };
 
 const registerCustomer = (customerData) => {
@@ -33,14 +42,12 @@ const registerCustomer = (customerData) => {
     });
 };
 
-// Logout
 const logout = () => {
     localStorage.removeItem("userToken");
     localStorage.removeItem("userRole");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userName");
 };
-
 
 export default {
     login,
