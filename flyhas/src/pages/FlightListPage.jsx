@@ -80,4 +80,4 @@ const Flightlistpage = () => {
     );
 };
 
-export default Flightlistpage;
+export default FlightListPage;
