@@ -6,7 +6,7 @@ import backgroundImage from './assets/Background.png';
 
 import { Routes, Route } from "react-router-dom";
 
-import Flightlistpage from './pages/Flightlistpage'
+import Flightlistpage from './pages/FlightListPage'
 import HomePage from './pages/HomePage'
 import Navbar from './components/Navbar'
 import NotFoundPage from './pages/NotFoundPage'
@@ -34,11 +34,11 @@ import OurPolicyPage from './pages/OurPolicyPage.jsx';
 import ServicesPage from './pages/ServicesPage.jsx';
 import CityGuidePage from './pages/CityGuidePage.jsx';
 import PrivateRoute from './components/PrivateRoute';
-
-
+import ManagerPage from './pages/ManagerPage.jsx';
+import ManagerInfo from "./components/ManagerInfo.jsx";
+import ManagerSupport from "./components/ManagerSupport.jsx";
 
 function App() {
-
   return (
     <>
       <div>
@@ -51,7 +51,6 @@ function App() {
           minHeight: "100vh",
           alignItems: { md: "flex-start" },
           p: 2, gap: 2,
-
         }}>
           <Routes>
             <Route path='/' element={<HomePage />} />
@@ -61,6 +60,8 @@ function App() {
             <Route path='/Register' element={<RegisterPage />} />
             <Route path='/Login' element={<LoginPage />} />
             <Route path='/PersonalInfo' element={<PersonalInformationPage />} />
+            
+           
             <Route path="/UserProfile/*" element={<PrivateRoute requiredRole="CUSTOMER" />}>
               <Route path="" element={<UserPage />}>
                 <Route path="MyProfile" element={<UserInfo />} />
@@ -68,6 +69,8 @@ function App() {
                 <Route path="Reservations" element={<UserReservations />} />
               </Route>
             </Route>
+            
+            
             <Route path="/AdminProfile/*" element={<PrivateRoute requiredRole="ADMIN" />}>
               <Route path="" element={<AdminPage />}>
                 <Route path="MyProfile" element={<AdminInfo />} />
@@ -78,25 +81,29 @@ function App() {
                 <Route path="Employees" element={<AdminShowEmployee />} />
               </Route>
             </Route>
+            
+            
+            <Route path="/ManagerProfile/*" element={<PrivateRoute requiredRole="MANAGER" />}>
+              <Route path="" element={<ManagerPage />}>
+                <Route path="MyProfile" element={<ManagerInfo />} />
+                <Route path="Support" element={<ManagerSupport />} />
+
+              </Route>
+            </Route>
+            
+            
             <Route path='/AboutUs' element={<AboutUs />} />
             <Route path='/Galleries' element={<GalleriesPage />} />
             <Route path='/OurPolicy' element={<OurPolicyPage />} />
             <Route path='/VisionMission' element={<VisionMissionPage />} />
             <Route path='/Services' element={<ServicesPage />} />
             <Route path='/CityGuide' element={<CityGuidePage />} />
-
+            
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
-
         </Box>
         <Footer />
-
-
-
       </div>
-
-
-
     </>
   )
 }
